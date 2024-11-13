@@ -275,19 +275,53 @@ def install_apt_deps(nonroot_pool: TGroup):
     for cmd in commands:
         nonroot_pool.run(cmd, watchers=[y_responder, yes_responder])
 
+def pull_datasets(nonroot_pool: TGroup):
+    # rclone copy --progress remote:/genomics-files/read-files/star/ read-files/star/
+    # rclone copy --progress remote:/genomics-files/read-files/bams/ read-files/bams
+    # rclone copy --progress remote:/genomics-files/read-files/SRR24039108/ read-files/SRR24039108/
+    # rclone copy --progress remote:/genomics-files/read-files/SRR24039108_1.fastq.split/ read-files/SRR24039108/SRR24039108_1.fastq.split/
+    # rclone copy --progress remote:/genomics-files/ec24-reference-files.tar .
+    commands = [
+        'mkdir -p ~/read-files/',
+        'mkdir -p ~/reference-files/',
+        'rclone copy --progress remote:/genomics-files/read-files/star/ read-files/star/',
+        'rclone copy --progress remote:/genomics-files/read-files/SRR24039108/ read-files/SRR24039108/',
+        'rclone copy --progress remote:/genomics-files/read-files/SRR24039108_1.fastq.split/ read-files/SRR24039108/SRR24039108_1.fastq.split/',
+        'rclone copy --progress remote:/genomics-files/ec24-reference-files.tar .',
+        'tar -xf ec24-reference-files.tar -C reference-files/'
+    ]
+    for cmd in commands:
+        print(f'Running {cmd}')
+        nonroot_pool.run(cmd, pty=True)
+
+def setup_codebase(pool: TGroup):
+    assert(os.getenv('GIT_TOKEN'))
+    assert(os.getenv('GIT_USERNAME'))
+    assert(os.getenv('GIT_REPO'))
+
+    pool.run(f'rm -rf {os.getenv("GIT_REPO")}', pty=True, warn=True)
+
+    # Auth Github
+    with open('git-token', 'w') as f:
+        f.write(os.getenv('GIT_TOKEN'))
+    pool.put('git-token', 'git-token')
+    pool.run(f'gh auth login --with-token < git-token ; gh repo clone {os.getenv("GIT_USERNAME")}/{os.getenv("GIT_REPO")}')
+
 if __name__ == "__main__":
     nonroot_pool = TGroup(
         'cc@129.114.109.74', # ectr-instance1
     )
-    install_apt_deps(nonroot_pool)
-    install_gh(nonroot_pool)
-    install_docker(nonroot_pool)
-    install_java(nonroot_pool)
-    install_nextflow(nonroot_pool)
-    install_golang(nonroot_pool)
-    install_rclone(nonroot_pool)
+    # install_apt_deps(nonroot_pool)
+    # install_gh(nonroot_pool)
+    # install_docker(nonroot_pool)
+    # install_java(nonroot_pool)
+    # install_nextflow(nonroot_pool)
+    # install_golang(nonroot_pool)
+    # install_rclone(nonroot_pool)
 
-    pull_docker_images(nonroot_pool)
+    # pull_docker_images(nonroot_pool)
+    pull_datasets(nonroot_pool)
+    # setup_codebase(nonroot_pool)
 
     # Install pyresmon
     # Download dataset
