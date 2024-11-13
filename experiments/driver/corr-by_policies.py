@@ -11,7 +11,16 @@ import time
 
 from utils import (
     TOP_DIR,
-    APPS, POLICIES, START_RUN, END_RUN, kill_associated_processes, run_agent, run_nextflow, run_exp_prep, run_exp_cleanup, run_resmon
+    APPS,
+    POLICIES,
+    START_RUN,
+    END_RUN,
+    kill_associated_processes,
+    run_agent,
+    run_nextflow,
+    run_exp_prep,
+    run_exp_cleanup,
+    run_resmon,
 )
 
 """
@@ -31,20 +40,26 @@ args = parser.parse_args()
 
 if __name__ == "__main__":
     print(f"{TOP_DIR}, running program: {args.app}")
-    
-    RUNS=[i for i in range(START_RUN, END_RUN)]
+
+    RUNS = [i for i in range(START_RUN, END_RUN)]
     for RUN in RUNS:
         try:
             assert args.app, "Application not provided"
             assert args.policy, "Policy not provided"
 
             WORKFLOW = f"/home/cc/2024-biosys-ec/experiments/nf_scripts/{args.app}.nf"
-            INPUT_CONFIG = f"/home/cc/2024-biosys-ec/experiments/configs/{args.app}.config"
-            PATH_CONTROLLER = f"/home/cc/2024-biosys-ec/elasticcontainer/controller/controller.go"
+            INPUT_CONFIG = (
+                f"/home/cc/2024-biosys-ec/experiments/configs/{args.app}.config"
+            )
+            PATH_CONTROLLER = (
+                f"/home/cc/2024-biosys-ec/elasticcontainer/controller/controller.go"
+            )
             APP = args.app
             POLICY = args.policy
 
-            print(f'============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============')
+            print(
+                f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============"
+            )
 
             LABEL = f"io_throttling-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
@@ -66,20 +81,20 @@ if __name__ == "__main__":
                     print(line)
                 time.sleep(1)
 
-            print('Nextflow process finished!')
+            print("Nextflow process finished!")
             # while agent_ps.poll() is None:
             for ps in all_agent_ps:
                 subprocess.check_output(f"sudo kill -9 {ps.pid}".split())
-                print(f'Agent PID {ps.pid} killed!')
+                print(f"Agent PID {ps.pid} killed!")
                 try:
                     subprocess.check_output(f"sudo pkill -TERM -P {ps.pid}".split())
-                    print(f'Child processes of PPID {ps.pid} killed!')
+                    print(f"Child processes of PPID {ps.pid} killed!")
                 except Exception as e:
                     print(e)
 
             # while resmon_ps.poll() is None:
             subprocess.check_output(f"sudo kill -9 {resmon_ps.pid}".split())
-            print('Resmon killed!')
+            print("Resmon killed!")
 
             # Cleanup
             run_exp_cleanup(LABEL)
