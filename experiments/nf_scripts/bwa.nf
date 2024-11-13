@@ -1,12 +1,14 @@
 import groovy.time.TimeCategory 
 import groovy.time.TimeDuration
 
-include { BWA_NO_LIMIT as BWA1 } from "/home/cc//elastic-container/containermod/experiments/nf_scripts/tools/bwa.nf"
-include { BWA_NO_LIMIT as BWA2 } from "/home/cc//elastic-container/containermod/experiments/nf_scripts/tools/bwa.nf"
-include { BWA_NO_LIMIT as BWA3 } from "/home/cc//elastic-container/containermod/experiments/nf_scripts/tools/bwa.nf"
-include { BWA_NO_LIMIT as BWA4 } from "/home/cc//elastic-container/containermod/experiments/nf_scripts/tools/bwa.nf"
+TOOL_PATH = params.tool_dir + "bwa.nf"
 
-REF_PATH = "/home/cc/nextflow/reference-files"
+include { BWA_NO_LIMIT as BWA1 } from TOOL_PATH
+include { BWA_NO_LIMIT as BWA2 } from TOOL_PATH
+include { BWA_NO_LIMIT as BWA3 } from TOOL_PATH
+include { BWA_NO_LIMIT as BWA4 } from TOOL_PATH
+
+REF_PATH = params.ref_dir
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
 ref_amb = Channel.fromPath(REF_PATH + '/*.amb')
 ref_ann = Channel.fromPath(REF_PATH + '/*.ann')
@@ -17,7 +19,7 @@ ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
 num_threads = params.num_threads
-READ_PATH = "/home/cc/nextflow/read-files/SRR24039108"
+READ_PATH = params.read_dir + "/SRR24039108"
 
 Date loadStart = new Date()
 println ("Data loading started ...")

@@ -1,13 +1,15 @@
 import groovy.time.TimeCategory 
 import groovy.time.TimeDuration
 
-include { STAR_NO_LIMIT_SIMPLE as STAR1 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/star.nf"
-include { STAR_NO_LIMIT_SIMPLE as STAR2 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/star.nf"
+TOOL_PATH = params.tool_dir + "star.nf"
+
+include { STAR_NO_LIMIT_SIMPLE as STAR1 } from TOOL_PATH
+include { STAR_NO_LIMIT_SIMPLE as STAR2 } from TOOL_PATH
 
 Date loadStart = new Date()
 println ("Data loading started ...")
 
-REF_PATH = "/home/cc/nextflow/reference-files"
+REF_PATH = params.ref_dir
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
 ref_amb = Channel.fromPath(REF_PATH + '/*.amb')
 ref_ann = Channel.fromPath(REF_PATH + '/*.ann')
@@ -20,7 +22,7 @@ genome_dir = Channel.fromPath(REF_PATH + '/star-2.7.5c_GRCh38.d1.vd1_gencode.v36
 
 
 /* Config */
-READ_PATH = "/home/cc/nextflow/read-files/star/"
+READ_PATH = params.read_dir + "/star/"
 meta_id = Channel.of(READ_PATH.tokenize('/')[-1])
 fastq_pair = Channel.fromFilePairs(READ_PATH + '/SRR*_{1,2}.{1,2}.fastq', flat: true)
                     .splitFastq(by: 30000000, limit:30000000, pe:true, file: true)

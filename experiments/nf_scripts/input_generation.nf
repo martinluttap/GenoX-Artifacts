@@ -1,4 +1,4 @@
-REF_PATH = "/home/cc/nextflow/reference-files"
+REF_PATH = params.ref_dir
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
 ref_amb = Channel.fromPath(REF_PATH + '/*.amb')
 ref_ann = Channel.fromPath(REF_PATH + '/*.ann')
@@ -8,7 +8,7 @@ ref_pac = Channel.fromPath(REF_PATH + '/*.pac')
 ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
-READ_PATH = "/home/cc/nextflow/read-files/SRR24039108"
+READ_PATH = params.read_dir + "/SRR24039108"
 NUM_BP = params['NUM_BP'] ?: 100000
 fastq_pair = Channel.fromFilePairs(READ_PATH + '/SRR*_{1,2}.fastq', flat: true)
                     .splitFastq(by: NUM_BP, limit:NUM_BP, pe:true, file: true)

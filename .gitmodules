@@ -13,3 +13,6 @@
 [submodule "2024-biosys-ec-autothrottle"]
 	path = 2024-biosys-ec-autothrottle
 	url = git@github.com:martinluttap/2024-biosys-ec-autothrottle.git
+[submodule "2024-biosys-ec-elasticcontainer"]
+	path = 2024-biosys-ec-elasticcontainer
+	url = git@github.com:martinluttap/2024-biosys-ec-elasticcontainer.git

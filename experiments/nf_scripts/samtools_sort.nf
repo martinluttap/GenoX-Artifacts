@@ -1,11 +1,13 @@
 import groovy.time.TimeCategory 
 import groovy.time.TimeDuration
 
-include { SAMTOOLS_SORT_NO_LIMIT as SAMTOOLS_SORT1 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/samtools_sort.nf"
-include { SAMTOOLS_SORT_NO_LIMIT as SAMTOOLS_SORT2 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/samtools_sort.nf"
+TOOL_PATH = params.tool_dir + "samtools_sort.nf"
+
+include { SAMTOOLS_SORT_NO_LIMIT as SAMTOOLS_SORT1 } from TOOL_PATH
+include { SAMTOOLS_SORT_NO_LIMIT as SAMTOOLS_SORT2 } from TOOL_PATH
 
 
-REF_PATH = "/home/cc/nextflow/reference-files"
+REF_PATH = params.ref_dir
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
 ref_amb = Channel.fromPath(REF_PATH + '/*.amb')
 ref_ann = Channel.fromPath(REF_PATH + '/*.ann')
@@ -16,7 +18,7 @@ ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
 num_threads = params.num_threads
-READ_PATH = "/home/cc/nextflow/read-files/bams/1500MB/"
+READ_PATH = params.read_dir + "/bams/1500MB/"
 
 Date loadStart = new Date()
 println ("Data loading started ...")

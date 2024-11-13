@@ -38,9 +38,9 @@ if __name__ == "__main__":
             assert args.app, "Application not provided"
             assert args.policy, "Policy not provided"
 
-            WORKFLOW = f"/home/cc//elastic-container/containermod/experiments/nf_scripts/{args.app}.nf"
-            INPUT_CONFIG = f"/home/cc//elastic-container/containermod/experiments/configs/{args.app}.config"
-            PATH_CONTROLLER = f"/home/cc//elastic-container/containermod/controller/controller.go"
+            WORKFLOW = f"/home/cc/2024-biosys-ec/experiments/nf_scripts/{args.app}.nf"
+            INPUT_CONFIG = f"/home/cc/2024-biosys-ec/experiments/configs/{args.app}.config"
+            PATH_CONTROLLER = f"/home/cc/2024-biosys-ec/elasticcontainer/controller/controller.go"
             APP = args.app
             POLICY = args.policy
 

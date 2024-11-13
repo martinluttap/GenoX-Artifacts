@@ -1,11 +1,12 @@
 import groovy.time.TimeCategory 
 import groovy.time.TimeDuration
 
-include { FASTQC_NO_LIMIT as FASTQC1 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/fastqc.nf"
-include { FASTQC_NO_LIMIT as FASTQC2 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/fastqc.nf"
+TOOL_PATH = params.tool_dir + "fastqc.nf"
 
+include { FASTQC_NO_LIMIT as FASTQC1 } from TOOL_PATH
+include { FASTQC_NO_LIMIT as FASTQC2 } from TOOL_PATH
 
-REF_PATH = "/home/cc/nextflow/reference-files"
+REF_PATH = params.ref_dir
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
 ref_amb = Channel.fromPath(REF_PATH + '/*.amb')
 ref_ann = Channel.fromPath(REF_PATH + '/*.ann')
@@ -16,7 +17,7 @@ ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
 num_threads = params.num_threads
-READ_PATH = "/home/cc/nextflow/read-files/SRR24039108/SRR24039108_1.fastq.split"
+READ_PATH = params.read_dir + "/SRR24039108/SRR24039108_1.fastq.split"
 
 Date loadStart = new Date()
 println ("Data loading started ...")

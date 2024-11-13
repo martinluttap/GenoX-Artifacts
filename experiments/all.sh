@@ -1,6 +1,6 @@
 #!/bin/bash
 
-POLICIES="autothrottle"
+POLICIES="base"
 APPS="trimmomatic"
 for POLICY in $POLICIES; do
   for APP in $APPS; do

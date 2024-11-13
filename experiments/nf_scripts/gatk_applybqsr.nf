@@ -1,14 +1,15 @@
 import groovy.time.TimeCategory 
 import groovy.time.TimeDuration
 
-include { GATK4_APPLYBQSR as APPLYBQSR_DEF1 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/gatk_applybqsr.nf"
-include { GATK4_APPLYBQSR_SPARK_NO_LIMIT as APPLYBQSR_SPARK1 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/gatk_applybqsr.nf"
+TOOL_PATH = params.tool_dir  + "gatk_applybqsr.nf"
 
+include { GATK4_APPLYBQSR as APPLYBQSR_DEF1 } from TOOL_PATH
+include { GATK4_APPLYBQSR_SPARK_NO_LIMIT as APPLYBQSR_SPARK1 } from TOOL_PATH
 
 Date loadStart = new Date()
 println ("Data loading started ...")
 
-REF_PATH = "/home/cc/nextflow/reference-files"
+REF_PATH = params.ref_dir
 ref_known_sites = Channel.fromPath(REF_PATH + '/*.vcf.gz')
 ref_known_sites_tbi = Channel.fromPath(REF_PATH + '/*.vcf.gz.tbi')
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
@@ -20,7 +21,7 @@ ref_pac = Channel.fromPath(REF_PATH + '/*.pac')
 ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
-BAM_PATH = "/home/cc/nextflow/read-files/bams/1500MB"
+BAM_PATH = params.read_dir + "/bams/1500MB"
 bam_file = Channel.fromPath(BAM_PATH + '/chr1to4.bam')
 
 workflow {

@@ -1,13 +1,14 @@
 import groovy.time.TimeCategory 
 import groovy.time.TimeDuration
 
-include { PICARD_VALIDATESAMFILE as PICARD_VALIDATESAMFILE } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/picard_validatesamfile.nf"
+TOOL_PATH = params.tool_dir + "picard_validatesamfile.nf"
 
+include { PICARD_VALIDATESAMFILE as PICARD_VALIDATESAMFILE } from TOOL_PATH
 
 Date loadStart = new Date()
 println ("Data loading started ...")
 
-REF_PATH = "/home/cc/nextflow/reference-files"
+REF_PATH = params.ref_dir
 ref_known_sites = Channel.fromPath(REF_PATH + '/*.vcf.gz')
 ref_known_sites_tbi = Channel.fromPath(REF_PATH + '/*.vcf.gz.tbi')
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
@@ -18,7 +19,7 @@ ref_fai = Channel.fromPath(REF_PATH + '/*.fai')
 ref_pac = Channel.fromPath(REF_PATH + '/*.pac')
 ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
-READ_PATH = "/home/cc/nextflow/read-files/bams/1500MB/"
+READ_PATH = params.read_dir + "/bams/1500MB/"
 bam_file = Channel.fromPath(READ_PATH + '/chr1to4.bam')
 bai_file = Channel.fromPath(READ_PATH + '/chr1to4.bam.bai')
 num_thread = 1

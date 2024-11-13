@@ -1,21 +1,24 @@
 import groovy.time.TimeCategory 
 import groovy.time.TimeDuration
 
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC1 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/trimmomatic.nf"
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC2 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/trimmomatic.nf"
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC3 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/trimmomatic.nf"
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC4 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/trimmomatic.nf"
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC5 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/trimmomatic.nf"
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC6 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/trimmomatic.nf"
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC7 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/trimmomatic.nf"
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC8 } from "/home/cc/elastic-container/containermod/experiments/nf_scripts/tools/trimmomatic.nf"
+
+TOOL_PATH = params.tool_dir + "trimmomatic.nf"
+
+include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC1 } from TOOL_PATH
+include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC2 } from TOOL_PATH
+include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC3 } from TOOL_PATH
+include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC4 } from TOOL_PATH
+include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC5 } from TOOL_PATH
+include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC6 } from TOOL_PATH
+include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC7 } from TOOL_PATH
+include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC8 } from TOOL_PATH
 
 
 Date loadStart = new Date()
 println ("Data loading started ...")
 
 /* REFERENCE FILES */
-REF_PATH = "/home/cc/nextflow/reference-files"
+REF_PATH = params.home_dir + "/reference-files"
 ref_known_sites = Channel.fromPath(REF_PATH + '/*.vcf.gz')
 ref_known_sites_tbi = Channel.fromPath(REF_PATH + '/*.vcf.gz.tbi')
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
@@ -27,7 +30,7 @@ ref_pac = Channel.fromPath(REF_PATH + '/*.pac')
 ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
-READ_PATH = "/home/cc/nextflow/read-files/star/"
+READ_PATH = params.home_dir + "/read-files/star/"
 meta_id = Channel.of(READ_PATH.tokenize('/')[-1])
 fastq_pair = Channel.fromFilePairs(READ_PATH + '/SRR*_{1,2}.{1,2}.fastq', flat: true)
                     .splitFastq(by: 80000000, limit:80000000, pe:true, file: true)

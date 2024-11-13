@@ -1,7 +1,7 @@
 import groovy.time.TimeCategory 
 import groovy.time.TimeDuration
 
-REF_PATH = "/home/cc/nextflow/reference-files"
+REF_PATH = params.ref_dir
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
 ref_amb = Channel.fromPath(REF_PATH + '/*.amb')
 ref_ann = Channel.fromPath(REF_PATH + '/*.ann')
@@ -12,7 +12,7 @@ ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
 num_threads = params.num_threads
-READ_PATH = "/home/cc/nextflow/read-files/SRR24039108"
+READ_PATH = params.read_dir + "/SRR24039108"
 
 Date loadStart = new Date()
 println ("Data loading started ...")
