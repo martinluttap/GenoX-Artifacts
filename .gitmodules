@@ -4,3 +4,15 @@
 [submodule "elasticcontainer"]
 	path = elasticcontainer
 	url = git@github.com:martinluttap/2024-biosys-ec-elasticcontainer.git
+[submodule "sota/sinan"]
+	path = sota/sinan
+	url = git@github.com:martinluttap/2024-biosys-ec-sinan.git
+[submodule "sota/autothrottle"]
+	path = sota/autothrottle
+	url = git@github.com:martinluttap/2024-biosys-ec-autothrottle.git
+[submodule "sota/nodens"]
+	path = sota/nodens
+	url = git@github.com:martinluttap/2024-biosys-ec-nodens.git
+[submodule "sota/alibabassf"]
+	path = sota/alibabassf
+	url = git@github.com:martinluttap/2024-biosys-ec-alibabassf.git
