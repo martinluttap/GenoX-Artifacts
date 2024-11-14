@@ -292,6 +292,8 @@ def install_apt_deps(nonroot_pool: TGroup):
         "sudo systemctl status libvirtd",
         "sudo usermod -aG kvm $USER",
         "sudo usermod -aG libvirt $USER",
+        # Contention tools
+        "sudo apt-get install -y fio",
     ]
     for cmd in commands:
         nonroot_pool.run(cmd, watchers=[y_responder, yes_responder])
