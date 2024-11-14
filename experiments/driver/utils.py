@@ -9,7 +9,7 @@ import random
 import time
 
 TOP_DIR = Path(os.path.dirname(os.path.realpath(__file__))).resolve()
-AGENT_DIR = Path(os.path.join(TOP_DIR, "../../")).resolve()
+AGENT_DIR = Path(os.path.join(TOP_DIR, "../../elasticcontainer")).resolve()
 
 APPS: List[str] = [
     "bwa",
@@ -77,7 +77,7 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
 
     agent_outfile = open(f"{LABEL}-agent.log", "w")
     agent_command: str = (
-        f"sudo /usr/local/go/bin/go run main.go {policy_flags[policy]}".split()
+        f"sudo go run main.go {policy_flags[policy]}".split()
     )
     agent_ps = subprocess.Popen(
         agent_command,
@@ -210,7 +210,7 @@ def run_exp_cleanup(LABEL: str) -> None:
     for (root, dirs, files) in os.walk(f"{AGENT_DIR}", topdown=True):
         for f in files:
             if LABEL not in f and f.endswith(".csv"):
-                new_name: str = f"{LABEL}-{f.rstrip('.csv').split('-')[-1]}.csv"
+                new_name: str = f"{LABEL}-{f.rstrip('.csv')}.csv"
                 path = Path(f"{AGENT_DIR}/{f}").resolve()
                 run_cmd(f"sudo mv -f {path} results/{LABEL}/{new_name}")
                 print(f"Moved {path} to results/{LABEL}/{new_name} ...")
