@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#POLICIES="base elasticcontainer"
+#APPS="bwa fastqc samtools_sort samtools_index gatk_baserecal_spark star trimmomatic"
 POLICIES="base"
 APPS="bwa"
 for POLICY in $POLICIES; do
