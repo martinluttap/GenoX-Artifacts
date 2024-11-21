@@ -61,7 +61,7 @@ if __name__ == "__main__":
                 f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============"
             )
 
-            LABEL = f"stall_time_analysis-{RUN}-{POLICY}-{APP}"
+            LABEL = f"psi_analysis-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep
