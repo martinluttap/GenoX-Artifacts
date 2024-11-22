@@ -195,13 +195,14 @@ def install_nextflow(nonroot_pool: TGroup):
 def install_golang(nonroot_pool: TGroup):
     # How to know the latest golang version?
     go_version = "go1.23.3"
+    user = nonroot_pool[0].user
     commands = [
         "sudo rm -rf /usr/local/go /usr/bin/go",
         # f'wget https://go.dev/dl/{go_version}.linux-amd64.tar.gz',
         f"sudo tar -C /usr/local -xzf {go_version}.linux-amd64.tar.gz",
         f"sudo ln -s /usr/local/go/bin/go /usr/bin/go ",
         f"sudo ln -s /usr/local/go/bin/gofmt /usr/bin/gofmt",
-        # 'export PATH=$PATH:/usr/local/go/bin',
+        f"sudo chown -R {user}:{user} /usr/local/go/",
         "go version",
     ]
     for cmd in commands:
@@ -301,12 +302,12 @@ def install_apt_deps(nonroot_pool: TGroup):
 
 def pull_datasets(nonroot_pool: TGroup):
     commands = [
-        "mkdir -p ~/read-files/",
-        "mkdir -p ~/reference-files/",
-        "rclone copy --progress remote:/genomics-files/read-files/star/ read-files/star/",
-        "rclone copy --progress remote:/genomics-files/read-files/SRR24039108/ read-files/SRR24039108/",
-        "rclone copy --progress remote:/genomics-files/read-files/SRR24039108_1.fastq.split/ read-files/SRR24039108/SRR24039108_1.fastq.split/",
-        "rclone copy --progress remote:/genomics-files/ec24-reference-files.tar .",
+        # "mkdir -p ~/read-files/",
+        # "mkdir -p ~/reference-files/",
+        "rclone sync --progress remote:/genomics-files/read-files/star/ read-files/star/",
+        "rclone sync --progress remote:/genomics-files/read-files/SRR24039108/ read-files/SRR24039108/",
+        "rclone sync --progress remote:/genomics-files/read-files/SRR24039108_1.fastq.split/ read-files/SRR24039108/SRR24039108_1.fastq.split/",
+        "rclone sync --progress remote:/genomics-files/ec24-reference-files.tar .",
         "tar -xf ec24-reference-files.tar -C reference-files/",
     ]
     for cmd in commands:
@@ -315,14 +316,28 @@ def pull_datasets(nonroot_pool: TGroup):
 
 
 def install_python_deps(nonroot_pool: TGroup):
+    # Auth Github
+    with open("git-token", "w") as f:
+        f.write(os.getenv("GIT_TOKEN"))
+    nonroot_pool.put("git-token", "git-token")
+    nonroot_pool.run(
+        # f'gh auth login --with-token < git-token'
+        f"gh auth login",
+        pty=True,
+    )
     commands = [
         # Resmon
         "pip install git+ssh://git@github.com/xybu/python-resmon.git",
         "pip3 install git+ssh://git@github.com/xybu/python-resmon.git",
         "python3 -m pip install git+ssh://git@github.com/xybu/python-resmon.git",
+        "echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bashrc/",
         # Dev tools
         "pip install pre-commit",
         "pip install detect-secrets",
+        # Competitors
+        "pip3 install vowpalwabbit",
+        "pip3 install numpy",
+        "pip3 install pandas",
     ]
     for cmd in commands:
         nonroot_pool.run(cmd, pty=True)
@@ -346,7 +361,7 @@ def setup_codebase(pool: TGroup):
 
 if __name__ == "__main__":
     nonroot_pool = TGroup(
-        "cc@129.114.109.74",  # ectr-instance1
+        "cc@129.114.109.54",  # ectr-instance1
     )
     install_apt_deps(nonroot_pool)
     install_gh(nonroot_pool)
