@@ -34,7 +34,8 @@ def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
 
     port = random.randint(10000, 60000)
     at_agent_outfile = open(f"{AT_AGENT_OUTPATH}", "w")
-    at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
+    # at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
+    at_agent_command: str = f"sudo python3 agent.py {port}".split()
     at_agent_ps = subprocess.Popen(
         at_agent_command,
         cwd=AUTOTHROTTLE_DIR,
@@ -49,7 +50,8 @@ def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
     AT_MASTER_OUTPATH: str = f"{LABEL}-at_master.log"
 
     at_master_outfile = open(f"{AT_MASTER_OUTPATH}", "w")
-    at_master_command: str = f"sudo /root/.pyenv/shims/python3 master.py {port}".split()
+    # at_master_command: str = f"sudo /root/.pyenv/shims/python3 master.py {port}".split()
+    at_master_command: str = f"sudo python3 master.py {port}".split()
     at_master_ps = subprocess.Popen(
         at_master_command,
         cwd=AUTOTHROTTLE_DIR,
@@ -128,6 +130,15 @@ def run_resmon(LABEL: str) -> subprocess.Popen:
     return resmon_ps
 
 
+def run_stress(cpu: int = 1) -> subprocess.Popen:
+    stress_command: str = f"stress --cpu {cpu}".split()
+    stress_ps = subprocess.Popen(
+        stress_command,
+    )
+    print(f"Stress started with PID: {stress_ps.pid}")
+
+    return stress_ps
+
 def run_cmd(cmd: str) -> None:
     ps = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
@@ -137,11 +148,11 @@ def run_cmd(cmd: str) -> None:
 
     return
 
-
 def kill_associated_processes():
-    # Kill previous resmon and agent process
-    print(f"Killing previous resmon and agent process ...")
+    print(f"Killing all associated processes ...")
     cmd: str = "ps aux | grep resmon | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    run_cmd(cmd)
+    cmd: str = "ps aux | grep stress | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
     run_cmd(cmd)
     cmd: str = "ps aux | grep \"main.go\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
     run_cmd(cmd)

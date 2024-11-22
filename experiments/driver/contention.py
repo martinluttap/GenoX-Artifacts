@@ -6,6 +6,7 @@ import argparse
 import datetime
 import os
 from pathlib import Path
+import itertools
 import subprocess
 import time
 
@@ -18,6 +19,7 @@ from utils import (
     kill_associated_processes,
     run_agent,
     run_nextflow,
+    run_stress,
     run_exp_prep,
     run_exp_cleanup,
     run_resmon,
@@ -42,7 +44,9 @@ def main():
     print(f"{TOP_DIR}, running program: {args.app}")
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
-    for RUN in RUNS:
+    STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
+
+    for (RUN, NUMCORE) in list(itertools.product(RUNS, STRESS_NUMCORES)):
         try:
             assert args.app, "Application not provided"
             assert args.policy, "Policy not provided"
@@ -61,7 +65,7 @@ def main():
                 f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============"
             )
 
-            LABEL = f"hog_core95-{RUN}-{POLICY}-{APP}"
+            LABEL = f"hog_core{NUMCORE}-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep
@@ -75,6 +79,8 @@ def main():
             resmon_ps = run_resmon(LABEL)
             # Run Nextflow
             nextflow_ps = run_nextflow(INPUT_CONFIG, LABEL, OUT_LOG)
+            # Run stressor
+            stress_ps = run_stress(NUMCORE)
 
             while nextflow_ps.poll() is None:
                 for line in nextflow_ps.stdout:
