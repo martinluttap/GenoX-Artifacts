@@ -2,7 +2,7 @@
 
 #POLICIES="base elasticcontainer"
 #APPS="bwa fastqc samtools_sort samtools_index gatk_baserecal_spark star trimmomatic"
-POLICIES="base"
+POLICIES="base elasticcontainer autothrottle"
 APPS="star"
 for POLICY in $POLICIES; do
   for APP in $APPS; do

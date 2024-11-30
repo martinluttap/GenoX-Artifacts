@@ -16,3 +16,9 @@
 [submodule "sota/alibabassf"]
 	path = sota/alibabassf
 	url = git@github.com:martinluttap/2024-biosys-ec-alibabassf.git
+[submodule "sota/2024-biosys-ec-showar"]
+	path = sota/2024-biosys-ec-showar
+	url = git@github.com:martinluttap/2024-biosys-ec-showar.git
+[submodule "sota/showar"]
+	path = sota/showar
+	url = git@github.com:martinluttap/2024-biosys-ec-showar.git

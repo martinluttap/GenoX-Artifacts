@@ -24,8 +24,8 @@ APPS: List[str] = [
 
 POLICIES: List[str] = ["base", "burst", "autothrottle", "elasticcontainer", "ec_capped"]
 
-START_RUN: int = 1
-END_RUN: int = 2
+START_RUN: int = 2
+END_RUN: int = 4
 
 def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
     AUTOTHROTTLE_DIR: str = f"{AGENT_DIR}/autothrottle"
