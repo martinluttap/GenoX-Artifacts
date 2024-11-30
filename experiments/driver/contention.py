@@ -44,7 +44,8 @@ def main():
     print(f"{TOP_DIR}, running program: {args.app}")
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
-    STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
+    # STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
+    STRESS_NUMCORES = [ 80, 64, 32, 0 ] # [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
 
     for (RUN, NUMCORE) in list(itertools.product(RUNS, STRESS_NUMCORES)):
         try:
