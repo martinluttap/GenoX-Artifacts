@@ -10,6 +10,7 @@ import time
 
 TOP_DIR = Path(os.path.dirname(os.path.realpath(__file__))).resolve()
 AGENT_DIR = Path(os.path.join(TOP_DIR, "../../elasticcontainer")).resolve()
+SOTA_DIR = Path(os.path.join(TOP_DIR, "../../sota")).resolve()
 
 APPS: List[str] = [
     "bwa",
@@ -22,10 +23,30 @@ APPS: List[str] = [
     "trimmomatic",
 ]
 
-POLICIES: List[str] = ["base", "burst", "autothrottle", "elasticcontainer", "ec_capped"]
+POLICIES: List[str] = ["base", "burst", "autothrottle", "elasticcontainer", "ec_capped", "showar"]
 
-START_RUN: int = 2
-END_RUN: int = 4
+START_RUN: int = 1
+END_RUN: int = 10
+
+
+def run_showar(LABEL: str) -> List[subprocess.Popen]:
+    SHOWAR_DIR: str = f"{SOTA_DIR}/showar"
+    SHOWAR_AGENT_OUTPATH: str = f"{LABEL}-showar_agent.log"
+    showar_agent_outfile = open(f"{SHOWAR_AGENT_OUTPATH}", "w")
+    # at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
+    showar_agent_command: str = f"sudo python3 showar.py".split()
+    showar_agent_ps = subprocess.Popen(
+        showar_agent_command,
+        cwd=SHOWAR_DIR,
+        stdin=subprocess.DEVNULL,
+        stderr=showar_agent_outfile,
+        stdout=showar_agent_outfile,
+        close_fds=True,
+    )
+    outpath = Path(f"{SHOWAR_DIR}/{SHOWAR_AGENT_OUTPATH}").resolve()
+    print(f"SHOWAR started with PID: {showar_agent_ps.pid}, outfile: {outpath}")
+
+    return showar_agent_ps
 
 def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
     AUTOTHROTTLE_DIR: str = f"{AGENT_DIR}/autothrottle"
@@ -71,6 +92,7 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
         "base": "--policy base",
         "burst": "--policy bk",
         "autothrottle": "--policy at",
+        "showar": "--policy sw",
         "elasticcontainer": "--policy ec",
         "ec_capped": "--policy ec_capped",
     }
@@ -96,6 +118,9 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
         at_master_ps, at_agent_ps = run_autothrottle(LABEL)
         all_processes.append(at_master_ps)
         all_processes.append(at_agent_ps)
+    if policy == "showar":
+        showar_agent_ps = run_showar(LABEL)
+        all_processes.append(showar_agent_ps)
 
     return all_processes
 
@@ -161,6 +186,8 @@ def kill_associated_processes():
     run_cmd(cmd)
     cmd: str = "ps aux | grep \"python3 agent.py\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
     run_cmd(cmd)
+    cmd: str = "ps aux | grep \"python3 showar.py\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    run_cmd(cmd)
 
 
 def run_exp_prep(INPUT_CONFIG: str, LABEL: str, WORKFLOW: str) -> None:
@@ -205,6 +232,7 @@ def run_exp_cleanup(LABEL: str) -> None:
         ".nf",
         "-at_agent.log",
         "-at_master.log",
+        "-showar_agent.log",
     ]
     for suffix in suffixes:
         DIR: str = "."
