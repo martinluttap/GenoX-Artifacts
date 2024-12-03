@@ -66,7 +66,7 @@ def main():
                 f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============"
             )
 
-            LABEL = f"dev_showar-{NUMCORE}-{RUN}-{POLICY}-{APP}"
+            LABEL = f"test_showar-{NUMCORE}-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep

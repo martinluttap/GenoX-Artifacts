@@ -25,8 +25,8 @@ APPS: List[str] = [
 
 POLICIES: List[str] = ["base", "burst", "autothrottle", "elasticcontainer", "ec_capped", "showar"]
 
-START_RUN: int = 1
-END_RUN: int = 10
+START_RUN: int = 2
+END_RUN: int = 4
 
 
 def run_showar(LABEL: str) -> List[subprocess.Popen]:
