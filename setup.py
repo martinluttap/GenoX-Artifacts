@@ -28,6 +28,11 @@ yes_responder = Responder(
     response="yes\n",
 )
 
+token_responder = Responder(
+    pattern=r"authentication token:.*",
+    response=f"{os.getenv('GIT_TOKEN')}\n",
+)
+
 
 def parameterized(dec):
     def layer(*args, **kwargs):
@@ -65,7 +70,9 @@ def install_gh(nonroot_pool: TGroup):
         "sudo apt install gh -y",
     ]
     for cmd in commands_inst_gh:
-        res = nonroot_pool.run(cmd, watchers=[yes_responder])
+        res = nonroot_pool.run(
+            cmd, watchers=[token_responder, yes_responder, token_responder]
+        )
 
 
 def setup_codebase(pool: TGroup):
@@ -79,7 +86,8 @@ def setup_codebase(pool: TGroup):
         f.write(os.getenv("GIT_TOKEN"))
     pool.put("git-token", "git-token")
     pool.run(
-        "gh auth login --with-token < git-token ; gh repo clone martinluttap/2024-ec-sinan"
+        "gh auth login --with-token < git-token ; gh repo clone martinluttap/2024-ec-sinan",
+        warn=True,
     )
 
 
@@ -92,7 +100,7 @@ def setup_python_all_nodes(pool: TGroup):
         "pip3 install numpy",
     ]
     for cmd in commands_setup_deps:
-        res = pool.run(cmd, watchers=[yes_responder])
+        res = pool.run(cmd, watchers=[token_responder, yes_responder])
         for host, r in res.items():
             print(f"{host}: {r.stdout}")
 
@@ -129,7 +137,9 @@ def install_docker(nonroot_pool: TGroup):
     ]
     failed_runs = []
     for cmd in commands_inst_docker:
-        res = nonroot_pool.run(cmd, watchers=[yes_responder], warn=True)
+        res = nonroot_pool.run(
+            cmd, watchers=[token_responder, yes_responder], warn=True
+        )
         if res.failed:
             failed_runs.append(res)
         print(res)
@@ -188,7 +198,9 @@ def install_nextflow(nonroot_pool: TGroup):
         # 'source ~/.bashrc'
     ]
     for cmd in commands:
-        nonroot_pool.run(cmd, pty=True, watchers=[y_responder, yes_responder])
+        nonroot_pool.run(
+            cmd, pty=True, watchers=[token_responder, y_responder, yes_responder]
+        )
 
 
 @check_installed("go")
@@ -199,6 +211,7 @@ def install_golang(nonroot_pool: TGroup):
     commands = [
         "sudo rm -rf /usr/local/go /usr/bin/go",
         # f'wget https://go.dev/dl/{go_version}.linux-amd64.tar.gz',
+        # f'curl --output  {go_version}.linux-amd64.tar.gz https://go.dev/dl/{go_version}.linux-amd64.tar.gz',
         f"sudo tar -C /usr/local -xzf {go_version}.linux-amd64.tar.gz",
         f"sudo ln -s /usr/local/go/bin/go /usr/bin/go ",
         f"sudo ln -s /usr/local/go/bin/gofmt /usr/bin/gofmt",
@@ -206,7 +219,7 @@ def install_golang(nonroot_pool: TGroup):
         "go version",
     ]
     for cmd in commands:
-        nonroot_pool.run(cmd, watchers=[y_responder, yes_responder])
+        nonroot_pool.run(cmd, watchers=[token_responder, y_responder, yes_responder])
 
 
 @check_installed("pyenv")
@@ -219,7 +232,9 @@ def install_pyenv(nonroot_pool: TGroup):
         "curl https://pyenv.run | bash",
     ]
     for cmd in commands:
-        nonroot_pool.run(cmd, pty=True, watchers=[y_responder, yes_responder])
+        nonroot_pool.run(
+            cmd, pty=True, watchers=[token_responder, y_responder, yes_responder]
+        )
 
     # Add pyenv to bashrc config
     with open("bashrc-pyenv", "w") as outfile:
@@ -297,16 +312,17 @@ def install_apt_deps(nonroot_pool: TGroup):
         "sudo apt-get install -y fio",
     ]
     for cmd in commands:
-        nonroot_pool.run(cmd, watchers=[y_responder, yes_responder])
+        nonroot_pool.run(cmd, watchers=[token_responder, y_responder, yes_responder])
 
 
 def pull_datasets(nonroot_pool: TGroup):
     commands = [
-        # "mkdir -p ~/read-files/",
-        # "mkdir -p ~/reference-files/",
+        "mkdir -p ~/read-files/",
+        "mkdir -p ~/reference-files/",
         "rclone sync --progress remote:/genomics-files/read-files/star/ read-files/star/",
         "rclone sync --progress remote:/genomics-files/read-files/SRR24039108/ read-files/SRR24039108/",
         "rclone sync --progress remote:/genomics-files/read-files/SRR24039108_1.fastq.split/ read-files/SRR24039108/SRR24039108_1.fastq.split/",
+        "rclone sync --progress remote:/genomics-files/read-files/bams/1500MB/ read-files/bams/1500MB/",
         "rclone sync --progress remote:/genomics-files/ec24-reference-files.tar .",
         "tar -xf ec24-reference-files.tar -C reference-files/",
     ]
@@ -316,24 +332,21 @@ def pull_datasets(nonroot_pool: TGroup):
 
 
 def install_python_deps(nonroot_pool: TGroup):
-    # Auth Github
-    with open("git-token", "w") as f:
-        f.write(os.getenv("GIT_TOKEN"))
-    nonroot_pool.put("git-token", "git-token")
-    nonroot_pool.run(
-        # f'gh auth login --with-token < git-token'
-        f"gh auth login",
-        pty=True,
-    )
     commands = [
         # Resmon
         "pip install git+ssh://git@github.com/xybu/python-resmon.git",
         "pip3 install git+ssh://git@github.com/xybu/python-resmon.git",
         "python3 -m pip install git+ssh://git@github.com/xybu/python-resmon.git",
-        "echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bashrc/",
+        "git clone git@github.com:xybu/python-resmon.git ; cd python-resmon ; pip install -r requirements.txt ; python3 ./setup.py install --user",
+        "echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bashrc",
         # Dev tools
         "pip install pre-commit",
         "pip install detect-secrets",
+        "sudo apt remove python3-pip",
+        "wget https://bootstrap.pypa.io/get-pip.py",
+        "sudo python3 get-pip.py",
+        "pip install pyopenssl --upgrade",
+        "pip install fabric python-dotenv",
         # Competitors
         "pip3 install vowpalwabbit",
         "pip3 install numpy",
@@ -359,10 +372,35 @@ def setup_codebase(pool: TGroup):
     )
 
 
+def install_qemu(pool: TGroup):
+    commands = [
+        "sudo apt-get install -y qemu-kvm virt-manager virtinst libvirt-clients bridge-utils libvirt-daemon-system -y",
+        "sudo systemctl enable --now libvirtd",
+        "sudo systemctl start libvirtd",
+        "sudo systemctl status libvirtd",
+    ]
+    for cmd in commands:
+        pool.run(cmd, pty=True)
+
+
+def setup_burstkernel(pool: TGroup):
+    commands = [
+        "sudo apt-get install cloud-utils",
+        "rclone copy --progress remote:/elastic-container/alibaba_linux2.qcow2 .",
+        "qemu-img convert -f qcow2 -O raw alibaba_linux2.qcow2 alibaba_linux2.img  ; rm alibaba_linux2.qcow2",
+        "rclone copy --progress remote:/elastic-container/ec-ref-dna.img .",
+        "rclone copy --progress remote:/elastic-container/ec-input-SRR24039108.img .",
+        "rclone copy --progress remote:/elastic-container/ec-input-bams1500MB.img .",
+    ]
+
+
 if __name__ == "__main__":
     nonroot_pool = TGroup(
         "cc@129.114.109.54",  # ectr-instance1
     )
+    # Stack for genomics workflows:
+    ## Docker, java, nextflow, various images & datasets.
+    ## Golang + python for our agent.
     install_apt_deps(nonroot_pool)
     install_gh(nonroot_pool)
     install_docker(nonroot_pool)
@@ -375,3 +413,8 @@ if __name__ == "__main__":
     pull_docker_images(nonroot_pool)
     pull_datasets(nonroot_pool)
     setup_codebase(nonroot_pool)
+
+    # Stack for SOTA.
+    ## Burst Kernel: QEMU, cloud-utils, VM images.
+    # install_qemu(nonroot_pool)
+    # setup_burstkernel(nonroot_pool)
