@@ -25,9 +25,12 @@ APPS: List[str] = [
 
 POLICIES: List[str] = ["base", "burst", "autothrottle", "elasticcontainer", "ec_capped", "showar"]
 
-START_RUN: int = 2
-END_RUN: int = 4
+START_RUN: int = 1
+END_RUN: int = 2
 
+
+def assign_cpuset(cpus: List[int]) -> None:
+    pass
 
 def run_showar(LABEL: str) -> List[subprocess.Popen]:
     SHOWAR_DIR: str = f"{SOTA_DIR}/showar"

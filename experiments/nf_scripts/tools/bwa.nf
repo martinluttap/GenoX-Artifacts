@@ -17,7 +17,7 @@ READ_PATH = params.read_dir + "/SRR24039108"
 Date loadStart = new Date()
 println ("Data loading started ...")
 fastq_pair = Channel.fromFilePairs(READ_PATH + '/*_{1,2}.fastq', flat: true)
-                    .splitFastq(by: 500000, limit:500000, pe:true, file: true)
+                    .splitFastq(by: 250, limit:250, pe:true, file: true)
 
 fastq_pair2 = Channel.fromFilePairs(READ_PATH + '/*_{1,2}.fastq', flat: true)
             .splitFastq(by: 250000, limit:250000, pe:true, file: true)
@@ -170,7 +170,7 @@ process BWA_NO_LIMIT {
         """
 }
 
-process BWA_NO_LIMIT2 {
+process BWA_NUM_THREADS {
     container "ghcr.io/martinluttap/bwa:0.7.15-554c2eb"
 
     input:
@@ -183,104 +183,14 @@ process BWA_NO_LIMIT2 {
         path ref_pac
         path ref_sa
         path ref_dict
+        val num_threads
+
     output:
         path "*.bam", emit: bam
 
     script: 
         METADATA = "\"@RG\\tID:SRR24039108\\tPL:ILLUMINA\\tSM:Sample\""
         """
-        bwa mem -t 32 -T 0 -R ${METADATA} ${ref_fa} ${forward_fastq} ${reverse_fastq} | samtools view -Shb -o SRR24039108.bam -
-        """
-}
-
-process BWA_NO_LIMIT3 {
-    container "ghcr.io/martinluttap/bwa:0.7.15-554c2eb"
-
-    input:
-        tuple val(meta), path(forward_fastq), path(reverse_fastq)
-        path ref_fa
-        path ref_amb
-        path ref_ann
-        path ref_bwt
-        path ref_fai
-        path ref_pac
-        path ref_sa
-        path ref_dict
-    output:
-        path "*.bam", emit: bam
-
-    script: 
-        METADATA = "\"@RG\\tID:SRR24039108\\tPL:ILLUMINA\\tSM:Sample\""
-        """
-        bwa mem -t 32 -T 0 -R ${METADATA} ${ref_fa} ${forward_fastq} ${reverse_fastq} | samtools view -Shb -o SRR24039108.bam -
-        """
-}
-
-process BWA_NO_LIMIT4 {
-    container "ghcr.io/martinluttap/bwa:0.7.15-554c2eb"
-
-    input:
-        tuple val(meta), path(forward_fastq), path(reverse_fastq)
-        path ref_fa
-        path ref_amb
-        path ref_ann
-        path ref_bwt
-        path ref_fai
-        path ref_pac
-        path ref_sa
-        path ref_dict
-    output:
-        path "*.bam", emit: bam
-
-    script: 
-        METADATA = "\"@RG\\tID:SRR24039108\\tPL:ILLUMINA\\tSM:Sample\""
-        """
-        bwa mem -t 32 -T 0 -R ${METADATA} ${ref_fa} ${forward_fastq} ${reverse_fastq} | samtools view -Shb -o SRR24039108.bam -
-        """
-}
-
-process BWA_NO_LIMIT5 {
-    container "ghcr.io/martinluttap/bwa:0.7.15-554c2eb"
-
-    input:
-        tuple val(meta), path(forward_fastq), path(reverse_fastq)
-        path ref_fa
-        path ref_amb
-        path ref_ann
-        path ref_bwt
-        path ref_fai
-        path ref_pac
-        path ref_sa
-        path ref_dict
-    output:
-        path "*.bam", emit: bam
-
-    script: 
-        METADATA = "\"@RG\\tID:SRR24039108\\tPL:ILLUMINA\\tSM:Sample\""
-        """
-        bwa mem -t 32 -T 0 -R ${METADATA} ${ref_fa} ${forward_fastq} ${reverse_fastq} | samtools view -Shb -o SRR24039108.bam -
-        """
-}
-
-process BWA_NO_LIMIT6 {
-    container "ghcr.io/martinluttap/bwa:0.7.15-554c2eb"
-
-    input:
-        tuple val(meta), path(forward_fastq), path(reverse_fastq)
-        path ref_fa
-        path ref_amb
-        path ref_ann
-        path ref_bwt
-        path ref_fai
-        path ref_pac
-        path ref_sa
-        path ref_dict
-    output:
-        path "*.bam", emit: bam
-
-    script: 
-        METADATA = "\"@RG\\tID:SRR24039108\\tPL:ILLUMINA\\tSM:Sample\""
-        """
-        bwa mem -t 32 -T 0 -R ${METADATA} ${ref_fa} ${forward_fastq} ${reverse_fastq} | samtools view -Shb -o SRR24039108.bam -
+        bwa mem -t ${num_threads} -T 0 -R ${METADATA} ${ref_fa} ${forward_fastq} ${reverse_fastq} | samtools view -Shb -o SRR24039108.bam -
         """
 }

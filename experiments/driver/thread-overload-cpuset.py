@@ -44,10 +44,8 @@ def main():
     print(f"{TOP_DIR}, running program: {args.app}")
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
-    # STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
-    STRESS_NUMCORES = [ 80 ] # 0 will fail
 
-    for (RUN, NUMCORE) in list(itertools.product(RUNS, STRESS_NUMCORES)):
+    for RUN in RUNS:
         try:
             assert args.app, "Application not provided"
             assert args.policy, "Policy not provided"
@@ -66,7 +64,7 @@ def main():
                 f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============"
             )
 
-            LABEL = f"test_showar-{NUMCORE}-{RUN}-{POLICY}-{APP}"
+            LABEL = f"4cores_overload1-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep
@@ -74,14 +72,13 @@ def main():
             run_exp_prep(INPUT_CONFIG, LABEL, WORKFLOW)
 
             # Run Agent
-            all_agent_ps = run_agent(LABEL, POLICY)
+            # all_agent_ps = run_agent(LABEL, POLICY)
+            all_agent_ps = []
 
             # Run Resmon
             resmon_ps = run_resmon(LABEL)
             # Run Nextflow
             nextflow_ps = run_nextflow(INPUT_CONFIG, LABEL, OUT_LOG)
-            # Run stressor
-            stress_ps = run_stress(NUMCORE)
 
             while nextflow_ps.poll() is None:
                 for line in nextflow_ps.stdout:
