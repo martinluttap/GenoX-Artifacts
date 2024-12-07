@@ -45,7 +45,7 @@ def main():
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
     # STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
-    STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
+    STRESS_NUMCORES = [ 0 ] # 0 will fail
 
     for (RUN, NUMCORE) in list(itertools.product(RUNS, STRESS_NUMCORES)):
         try:
@@ -66,7 +66,7 @@ def main():
                 f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============"
             )
 
-            LABEL = f"test_showar-{NUMCORE}-{RUN}-{POLICY}-{APP}"
+            LABEL = f"scale_freq_0.02s-{NUMCORE}-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep
