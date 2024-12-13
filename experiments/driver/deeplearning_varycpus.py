@@ -46,7 +46,7 @@ def main():
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
     # STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
-    CPUS = [8, 16]  # 0 will fail
+    CPUS = [1, 4, 8, 16]  # 0 will fail
 
     for RUN, CPU in list(itertools.product(RUNS, CPUS)):
         try:
