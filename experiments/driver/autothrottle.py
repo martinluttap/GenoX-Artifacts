@@ -68,7 +68,9 @@ def run_nextflow(exp_dir: str = "") -> subprocess.Popen:
 
     DIR: str = f"{TOP_DIR}/../"
 
-    nextflow_command: str = f"nextflow run {DIR}/{LABEL}.nf -c {INPUT_CONFIG} -with-timeline {DIR}/{OUT_LOG.rstrip('.log')}-timeline.html -with-trace {DIR}/{OUT_LOG.rstrip('.log')}-trace.txt -with-report {DIR}/{OUT_LOG.rstrip('.log')}-report.html".split()
+    nextflow_command: str = (
+        f"nextflow run {DIR}/{LABEL}.nf -c {INPUT_CONFIG} -with-timeline {DIR}/{OUT_LOG.rstrip('.log')}-timeline.html -with-trace {DIR}/{OUT_LOG.rstrip('.log')}-trace.txt -with-report {DIR}/{OUT_LOG.rstrip('.log')}-report.html".split()
+    )
 
     nextflow_ps = subprocess.Popen(
         nextflow_command,
@@ -107,15 +109,23 @@ def run_cmd(cmd: str) -> None:
 def run_exp_prep(exp_dir: str = "") -> None:
     # Kill previous resmon and agent process
     print(f"Killing previous resmon and agent process ...")
-    cmd: str = "ps aux | grep resmon | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep resmon | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
-    cmd: str = "ps aux | grep \"main.go\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep \"main.go\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
-    cmd: str = "ps aux | grep \"go-build\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep \"go-build\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
 
     # Clear PageCache, dentries, indoes, and swap
-    cmd: str = "sudo sync; echo 3 | sudo tee /proc/sys/vm/drop_caches ; sudo swapoff -a && sudo swapon -a"
+    cmd: str = (
+        "sudo sync; echo 3 | sudo tee /proc/sys/vm/drop_caches ; sudo swapoff -a && sudo swapon -a"
+    )
     print(f"Clearing PageCache, dentries, indoes, and swap ...")
     run_cmd(cmd)
 
@@ -137,7 +147,7 @@ def run_exp_prep(exp_dir: str = "") -> None:
     )
 
     # Removed -cpu and -all csv files
-    for (root, dirs, files) in os.walk(f"{AGENT_DIR}", topdown=True):
+    for root, dirs, files in os.walk(f"{AGENT_DIR}", topdown=True):
         for f in files:
             if LABEL not in f and f.endswith(".csv"):
                 path = Path(f"{AGENT_DIR}/{f}").resolve()
@@ -166,7 +176,7 @@ def run_exp_cleanup(exp_dir: str = "") -> None:
         print(f"Moved {LABEL}{suffix} to results/{LABEL} ...")
 
     # Get <cid>-all and <cid>-cpu csv files.
-    for (root, dirs, files) in os.walk(f"{AGENT_DIR}", topdown=True):
+    for root, dirs, files in os.walk(f"{AGENT_DIR}", topdown=True):
         for f in files:
             if LABEL not in f and f.endswith(".csv"):
                 new_name: str = f"{LABEL}-{f.rstrip('.csv').split('-')[-1]}.csv"

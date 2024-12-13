@@ -39,6 +39,7 @@ parser.add_argument("--policy", type=str, choices=POLICIES, help="Policy to run"
 
 args = parser.parse_args()
 
+
 def main():
     print(f"{TOP_DIR}, running program: {args.app}")
 
@@ -78,7 +79,7 @@ def main():
             resnet_ps = run_resnet18(LABEL)
 
             while resnet_ps.poll() is None:
-                print(f'{resnet_ps.stdout} Running ...')
+                print(f"{resnet_ps.stdout} Running ...")
                 time.sleep(1)
 
             print("ResNet process finished!")
@@ -107,6 +108,6 @@ def main():
 
         time.sleep(3)
 
+
 if __name__ == "__main__":
     main()
-    

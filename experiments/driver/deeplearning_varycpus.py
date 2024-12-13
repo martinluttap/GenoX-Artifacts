@@ -40,14 +40,15 @@ parser.add_argument("--policy", type=str, choices=POLICIES, help="Policy to run"
 args = parser.parse_args()
 args.policy = "base"
 
+
 def main():
     print(f"{TOP_DIR}, running program: {args.app}")
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
     # STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
-    CPUS = [ 8, 16 ] # 0 will fail
+    CPUS = [8, 16]  # 0 will fail
 
-    for (RUN, CPU) in list(itertools.product(RUNS, CPUS)):
+    for RUN, CPU in list(itertools.product(RUNS, CPUS)):
         try:
             assert args.app, "Application not provided"
             assert args.policy, "Policy not provided"
@@ -83,7 +84,7 @@ def main():
             resnet_ps = run_resnet18(LABEL, CPU)
 
             while resnet_ps.poll() is None:
-                print(f'{resnet_ps.stdout} Running ...')
+                print(f"{resnet_ps.stdout} Running ...")
                 time.sleep(1)
 
             print("ResNet process finished!")
@@ -112,6 +113,6 @@ def main():
 
         time.sleep(3)
 
+
 if __name__ == "__main__":
     main()
-    

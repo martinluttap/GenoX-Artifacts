@@ -26,7 +26,14 @@ APPS: List[str] = [
     "resnet18",
 ]
 
-POLICIES: List[str] = ["base", "burst", "autothrottle", "elasticcontainer", "ec_capped", "showar"]
+POLICIES: List[str] = [
+    "base",
+    "burst",
+    "autothrottle",
+    "elasticcontainer",
+    "ec_capped",
+    "showar",
+]
 
 START_RUN: int = 1
 END_RUN: int = 4
@@ -50,6 +57,7 @@ def run_showar(LABEL: str) -> List[subprocess.Popen]:
     print(f"SHOWAR started with PID: {showar_agent_ps.pid}, outfile: {outpath}")
 
     return showar_agent_ps
+
 
 def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
     AUTOTHROTTLE_DIR: str = f"{AGENT_DIR}/autothrottle"
@@ -102,9 +110,7 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
     assert policy in policy_flags.keys(), f"Policy {policy} not found!"
 
     agent_outfile = open(f"{LABEL}-agent.log", "w")
-    agent_command: str = (
-        f"sudo go run main.go {policy_flags[policy]}".split()
-    )
+    agent_command: str = f"sudo go run main.go {policy_flags[policy]}".split()
     agent_ps = subprocess.Popen(
         agent_command,
         cwd=AGENT_DIR,
@@ -131,9 +137,11 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
 def run_resnet18(LABEL: str, CPUS: str = None) -> subprocess.Popen:
     DIR: str = f"{TOP_DIR}/../deeplearning"
 
-    cpus: str = f'--cpus={CPUS}' if CPUS else ''
+    cpus: str = f"--cpus={CPUS}" if CPUS else ""
     outfile = open(f"{LABEL}-dl.log", "w")
-    resnet_command: str = f'sudo docker run -v {DIR}:/workspace {cpus} --shm-size=32G --rm --gpus all pytorch/pytorch python3 resnet18.py'.split()
+    resnet_command: str = (
+        f"sudo docker run -v {DIR}:/workspace {cpus} --shm-size=32G --rm --gpus all pytorch/pytorch python3 resnet18.py".split()
+    )
 
     resnet18_ps = subprocess.Popen(
         resnet_command,
@@ -146,10 +154,13 @@ def run_resnet18(LABEL: str, CPUS: str = None) -> subprocess.Popen:
 
     return resnet18_ps
 
+
 def run_nextflow(INPUT_CONFIG: str, LABEL: str, OUT_LOG: str) -> subprocess.Popen:
     DIR: str = f"{TOP_DIR}/../"
 
-    nextflow_command: str = f"nextflow run {DIR}/{LABEL}.nf -c {INPUT_CONFIG} -with-timeline {DIR}/{OUT_LOG[:-4]}-timeline.html -with-trace {DIR}/{OUT_LOG[:-4]}-trace.txt -with-report {DIR}/{OUT_LOG[:-4]}-report.html".split()
+    nextflow_command: str = (
+        f"nextflow run {DIR}/{LABEL}.nf -c {INPUT_CONFIG} -with-timeline {DIR}/{OUT_LOG[:-4]}-timeline.html -with-trace {DIR}/{OUT_LOG[:-4]}-trace.txt -with-report {DIR}/{OUT_LOG[:-4]}-report.html".split()
+    )
 
     nextflow_ps = subprocess.Popen(
         nextflow_command,
@@ -184,6 +195,7 @@ def run_stress(cpu: int = 1) -> subprocess.Popen:
 
     return stress_ps
 
+
 def run_cmd(cmd: str) -> None:
     ps = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
@@ -193,27 +205,44 @@ def run_cmd(cmd: str) -> None:
 
     return
 
+
 def kill_associated_processes():
     print(f"Killing all associated processes ...")
-    cmd: str = "ps aux | grep resmon | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep resmon | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
-    cmd: str = "ps aux | grep stress | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep stress | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
-    cmd: str = "ps aux | grep \"main.go\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep \"main.go\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
-    cmd: str = "ps aux | grep \"go-build\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep \"go-build\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
-    cmd: str = "ps aux | grep \"python3 master.py\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep \"python3 master.py\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
-    cmd: str = "ps aux | grep \"python3 agent.py\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep \"python3 agent.py\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
-    cmd: str = "ps aux | grep \"python3 showar.py\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    cmd: str = (
+        "ps aux | grep \"python3 showar.py\" | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} sudo kill -9 {}"
+    )
     run_cmd(cmd)
 
 
 def run_exp_prep(INPUT_CONFIG: str, LABEL: str, WORKFLOW: str) -> None:
     # Clear PageCache, dentries, indoes, and swap
-    cmd: str = "sudo sync; echo 3 | sudo tee /proc/sys/vm/drop_caches ; sudo swapoff -a && sudo swapon -a"
+    cmd: str = (
+        "sudo sync; echo 3 | sudo tee /proc/sys/vm/drop_caches ; sudo swapoff -a && sudo swapon -a"
+    )
     print(f"Clearing PageCache, dentries, indoes, and swap ...")
     run_cmd(cmd)
 
@@ -228,7 +257,7 @@ def run_exp_prep(INPUT_CONFIG: str, LABEL: str, WORKFLOW: str) -> None:
     run_cmd(f"cp {INPUT_CONFIG} {LABEL}.config")
 
     # Removed -cpu and -all csv files
-    for (root, dirs, files) in os.walk(f"{AGENT_DIR}", topdown=True):
+    for root, dirs, files in os.walk(f"{AGENT_DIR}", topdown=True):
         for f in files:
             if LABEL not in f and f.endswith(".csv"):
                 path = Path(f"{AGENT_DIR}/{f}").resolve()
@@ -267,7 +296,7 @@ def run_exp_cleanup(LABEL: str) -> None:
             print(e)
 
     # Get <cid>-all and <cid>-cpu csv files.
-    for (root, dirs, files) in os.walk(f"{AGENT_DIR}", topdown=True):
+    for root, dirs, files in os.walk(f"{AGENT_DIR}", topdown=True):
         for f in files:
             if LABEL not in f and f.endswith(".csv"):
                 new_name: str = f"{LABEL}-{f.rstrip('.csv')}.csv"

@@ -38,6 +38,7 @@ parser.add_argument("--policy", type=str, choices=POLICIES, help="Policy to run"
 
 args = parser.parse_args()
 
+
 def main():
     print(f"{TOP_DIR}, running program: {args.app}")
 
@@ -106,6 +107,7 @@ def main():
             # parser.print_help()
 
         time.sleep(3)
+
 
 if __name__ == "__main__":
     main()

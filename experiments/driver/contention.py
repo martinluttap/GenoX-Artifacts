@@ -40,14 +40,15 @@ parser.add_argument("--policy", type=str, choices=POLICIES, help="Policy to run"
 
 args = parser.parse_args()
 
+
 def main():
     print(f"{TOP_DIR}, running program: {args.app}")
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
     # STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
-    STRESS_NUMCORES = [ 0 ] # 0 will fail
+    STRESS_NUMCORES = [0]  # 0 will fail
 
-    for (RUN, NUMCORE) in list(itertools.product(RUNS, STRESS_NUMCORES)):
+    for RUN, NUMCORE in list(itertools.product(RUNS, STRESS_NUMCORES)):
         try:
             assert args.app, "Application not provided"
             assert args.policy, "Policy not provided"
@@ -113,6 +114,7 @@ def main():
             # parser.print_help()
 
         time.sleep(3)
+
 
 if __name__ == "__main__":
     main()

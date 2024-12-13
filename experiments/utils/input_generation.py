@@ -145,9 +145,9 @@ if __name__ == "__main__":
         stream_command(["rm", "-rf", "work/"], cwd=cwd)
 
         # Then run the generation once
-        nextflow_cmd: List[
-            str
-        ] = f"nextflow nf_scripts/input_generation.nf --NUM_BP {int(bp)}".split(" ")
+        nextflow_cmd: List[str] = (
+            f"nextflow nf_scripts/input_generation.nf --NUM_BP {int(bp)}".split(" ")
+        )
         stream_command(
             nextflow_cmd, cwd=cwd, stdout_handler=print, stderr_handler=print
         )
