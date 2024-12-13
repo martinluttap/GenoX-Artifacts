@@ -13,6 +13,7 @@ AGENT_DIR = Path(os.path.join(TOP_DIR, "../../elasticcontainer")).resolve()
 SOTA_DIR = Path(os.path.join(TOP_DIR, "../../sota")).resolve()
 
 APPS: List[str] = [
+    # Genomics
     "bwa",
     "fastqc",
     "gatk_applybqsr",
@@ -21,12 +22,14 @@ APPS: List[str] = [
     "samtools_sort",
     "star",
     "trimmomatic",
+    # Deep Learning
+    "resnet18",
 ]
 
 POLICIES: List[str] = ["base", "burst", "autothrottle", "elasticcontainer", "ec_capped", "showar"]
 
 START_RUN: int = 1
-END_RUN: int = 2
+END_RUN: int = 4
 
 
 def run_showar(LABEL: str) -> List[subprocess.Popen]:
@@ -124,6 +127,24 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
 
     return all_processes
 
+
+def run_resnet18(LABEL: str, CPUS: str = None) -> subprocess.Popen:
+    DIR: str = f"{TOP_DIR}/../deeplearning"
+
+    cpus: str = f'--cpus={CPUS}' if CPUS else ''
+    outfile = open(f"{LABEL}-dl.log", "w")
+    resnet_command: str = f'sudo docker run -v {DIR}:/workspace {cpus} --shm-size=32G --rm --gpus all pytorch/pytorch python3 resnet18.py'.split()
+
+    resnet18_ps = subprocess.Popen(
+        resnet_command,
+        cwd=TOP_DIR,
+        stdin=subprocess.DEVNULL,
+        stderr=outfile,
+        stdout=outfile,
+        close_fds=True,
+    )
+
+    return resnet18_ps
 
 def run_nextflow(INPUT_CONFIG: str, LABEL: str, OUT_LOG: str) -> subprocess.Popen:
     DIR: str = f"{TOP_DIR}/../"
@@ -233,6 +254,7 @@ def run_exp_cleanup(LABEL: str) -> None:
         "-at_agent.log",
         "-at_master.log",
         "-showar_agent.log",
+        "-dl.log",
     ]
     for suffix in suffixes:
         DIR: str = "."
