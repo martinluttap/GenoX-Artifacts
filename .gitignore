@@ -23,6 +23,10 @@ experiments/results/*
 experiments/.nextflow.*
 experiments/**nextflow**
 
+experiments/deeplearning/*
+!experiments/deeplearning/*.py
+!experiments/deeplearning/*.ipynb
+
 *.csv
 *.env
 conf-*
