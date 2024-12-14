@@ -9,6 +9,7 @@ import os
 import subprocess
 import tarfile
 import wget
+from pathlib import Path
 
 # NeMo's "core" package
 import nemo
@@ -115,8 +116,10 @@ config_path = './configs/config.yaml'
 if not os.path.exists(config_path):
     # Grab the config we'll use in this example
     BRANCH = 'main'
-    !mkdir configs
-    !wget -P configs/ https://raw.githubusercontent.com/NVIDIA/NeMo/$BRANCH/examples/asr/conf/config.yaml
+    url = f'https://raw.githubusercontent.com/NVIDIA/NeMo/{BRANCH}/examples/asr/conf/config.yaml'
+    config_dir = f'{data_dir}/configs' 
+    Path(f"./configs").mkdir(parents=True, exist_ok=True)
+    wget.download(url, f'{config_dir}')
 
 yaml = YAML(typ='safe')
 with open(config_path) as f:
