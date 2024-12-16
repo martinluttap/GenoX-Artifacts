@@ -26,6 +26,8 @@ experiments/**nextflow**
 experiments/deeplearning/*
 !experiments/deeplearning/*.py
 !experiments/deeplearning/*.ipynb
+!experiments/deeplearning/ssd/
+!experiments/deeplearning/TFT/
 
 *.csv
 *.env
