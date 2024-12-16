@@ -147,7 +147,7 @@ def install_docker(nonroot_pool: TGroup):
     return failed_runs
 
 
-def pull_docker_images(nonroot_pool: TGroup):
+def pull_docker_genomics(nonroot_pool: TGroup):
     login_docker(nonroot_pool)
     images = [
         "ghcr.io/martinluttap/bwa:0.7.15-554c2eb",
@@ -157,6 +157,15 @@ def pull_docker_images(nonroot_pool: TGroup):
         "ghcr.io/martinluttap/samtools:1.9",
         "ghcr.io/martinluttap/star2:2.7.10b",
         "ghcr.io/martinluttap/trimmomatic:0.38",
+    ]
+    for image in images:
+        nonroot_pool.run(f"docker pull {image}", pty=True)
+
+
+def pull_docker_deeplearning(nonroot_pool: TGroup):
+    login_docker(nonroot_pool)
+    images = [
+        "pytorch/pytorch",
     ]
     for image in images:
         nonroot_pool.run(f"docker pull {image}", pty=True)
@@ -310,6 +319,8 @@ def install_apt_deps(nonroot_pool: TGroup):
         "sudo usermod -aG libvirt $USER",
         # Contention tools
         "sudo apt-get install -y fio",
+        # Workload
+        "sudo apt-get install -y libmpich-dev libopenmpi-dev nfs-kernel-server nfs-common",
     ]
     for cmd in commands:
         nonroot_pool.run(cmd, watchers=[token_responder, y_responder, yes_responder])
@@ -383,6 +394,20 @@ def install_qemu(pool: TGroup):
         pool.run(cmd, pty=True)
 
 
+def install_nvidia_toolkit(pool: TGroup):
+    install_docker(pool)
+    commands = [
+        "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg",
+        "curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list",
+        "sudo apt-get update",
+        "sudo apt-get install -y nvidia-container-toolkit",
+        "sudo systemctl restart docker.service",
+        "sudo sed -E 's|^[#]*no-cgroups.*|no-cgroups = false|g'  /etc/nvidia-container-runtime/config.toml",
+    ]
+    for cmd in commands:
+        pool.run(cmd, pty=True, watchers=[y_responder, yes_responder])
+
+
 def setup_burstkernel(pool: TGroup):
     commands = [
         "sudo apt-get install cloud-utils",
@@ -396,23 +421,29 @@ def setup_burstkernel(pool: TGroup):
 
 if __name__ == "__main__":
     nonroot_pool = TGroup(
-        "cc@129.114.109.54",  # ectr-instance1
+        "cc@129.114.109.8",  # ectr-instance1
     )
     # Stack for genomics workflows:
     ## Docker, java, nextflow, various images & datasets.
     ## Golang + python for our agent.
-    install_apt_deps(nonroot_pool)
-    install_gh(nonroot_pool)
-    install_docker(nonroot_pool)
-    install_java(nonroot_pool)
-    install_nextflow(nonroot_pool)
-    install_golang(nonroot_pool)
-    install_rclone(nonroot_pool)
-    install_python_deps(nonroot_pool)
+    # install_apt_deps(nonroot_pool)
+    # install_gh(nonroot_pool)
+    # install_docker(nonroot_pool)
+    # install_java(nonroot_pool)
+    # install_nextflow(nonroot_pool)
+    # install_golang(nonroot_pool)
+    # install_rclone(nonroot_pool)
+    # install_python_deps(nonroot_pool)
 
-    pull_docker_images(nonroot_pool)
-    pull_datasets(nonroot_pool)
-    setup_codebase(nonroot_pool)
+    # setup_codebase(nonroot_pool)
+
+    # Workload
+    ## Genomics
+    # pull_docker_genomics(nonroot_pool)
+    # pull_datasets(nonroot_pool)
+    ## Deep Learning (only on GPU nodes)
+    install_nvidia_toolkit(nonroot_pool)
+    pull_docker_deeplearning(nonroot_pool)
 
     # Stack for SOTA.
     ## Burst Kernel: QEMU, cloud-utils, VM images.
