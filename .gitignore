@@ -28,6 +28,7 @@ experiments/deeplearning/*
 !experiments/deeplearning/*.ipynb
 !experiments/deeplearning/ssd/
 !experiments/deeplearning/TFT/
+!experiments/deeplearning/jasper/
 
 *.csv
 *.env

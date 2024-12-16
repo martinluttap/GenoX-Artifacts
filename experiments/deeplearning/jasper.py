@@ -199,7 +199,7 @@ class LogPerformanceCallback(Callback):
         self.start_time = time.time()
         self.last_batch_end_time = time.time()
         self.between_step_time = time.time()
-        print(f'[{dt.utcfromtimestamp(time.time())}] Epoch end')
+        print(f'\n[{dt.utcfromtimestamp(time.time())}] Epoch end\n')
     
     @rank_zero_only
     def on_train_batch_end(
@@ -239,7 +239,7 @@ class LogPerformanceCallback(Callback):
 
 cb = LogPerformanceCallback()
 trainer = pl.Trainer(devices=1, accelerator='gpu', callbacks=cb,
-                    log_every_n_steps=10, max_epochs=50)
+                    log_every_n_steps=10, max_epochs=10)
 
 from omegaconf import DictConfig
 params['model']['train_ds']['manifest_filepath'] = train_manifest

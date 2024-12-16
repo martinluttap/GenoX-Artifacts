@@ -19,6 +19,7 @@ from utils import (
     kill_associated_processes,
     run_agent,
     run_resnet18,
+    run_jasper,
     run_stress,
     run_exp_prep,
     run_exp_cleanup,
@@ -26,12 +27,12 @@ from utils import (
 )
 
 """
-Run ResNet experiment.
+Run deep learning workload experiment.
 """
 
 parser = argparse.ArgumentParser(
     prog="deeplearning",
-    description=f"Script for ResNet experiment.",
+    description=f"Script for DL experiments.",
 )
 
 parser.add_argument("--app", type=str, choices=APPS, help="Application to run")
@@ -76,10 +77,10 @@ def main():
             # Run Resmon
             resmon_ps = run_resmon(LABEL)
             # Run Resnet18
-            resnet_ps = run_resnet18(LABEL)
+            jasper_ps = run_jasper(LABEL)
 
-            while resnet_ps.poll() is None:
-                print(f"{resnet_ps.stdout} Running ...")
+            while jasper_ps.poll() is None:
+                print(f"{jasper_ps.stdout} Running ...")
                 time.sleep(1)
 
             print("ResNet process finished!")

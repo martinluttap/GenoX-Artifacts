@@ -24,6 +24,9 @@ APPS: List[str] = [
     "trimmomatic",
     # Deep Learning
     "resnet18",
+    "jasper",
+    "ssd",
+    "tft",
 ]
 
 POLICIES: List[str] = [
@@ -153,6 +156,26 @@ def run_resnet18(LABEL: str, CPUS: str = None) -> subprocess.Popen:
     )
 
     return resnet18_ps
+
+def run_jasper(LABEL: str, CPUS: str = None) -> subprocess.Popen:
+    DIR: str = f"{TOP_DIR}/../deeplearning"
+
+    cpus: str = f"--cpus={CPUS}" if CPUS else ""
+    outfile = open(f"{LABEL}-dl.log", "w")
+    resnet_command: str = (
+        f"sudo docker run -v {DIR}:/workspace {cpus} --ipc=host --network=host --rm --gpus all jasper python3 jasper.py".split()
+    )
+
+    jasper_ps = subprocess.Popen(
+        resnet_command,
+        cwd=TOP_DIR,
+        stdin=subprocess.DEVNULL,
+        stderr=outfile,
+        stdout=outfile,
+        close_fds=True,
+    )
+
+    return jasper_ps
 
 
 def run_nextflow(INPUT_CONFIG: str, LABEL: str, OUT_LOG: str) -> subprocess.Popen:

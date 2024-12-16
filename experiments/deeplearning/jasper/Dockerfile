@@ -8,4 +8,4 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Install requirements
-RUN pip3 install lightning pytorch-lightning Cython nemo_toolkit['asr'] librosa 
+RUN pip3 install wget lightning pytorch-lightning Cython nemo_toolkit['asr'] librosa 
