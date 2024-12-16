@@ -16,7 +16,7 @@
 : ${LR:=1e-3}
 : ${NGPU:=4}
 : ${BATCH_SIZE:=1024}
-: ${EPOCHS:=2}
+: ${EPOCHS:=10}
 
 python -m torch.distributed.run --nproc_per_node=${NGPU} train.py \
         --dataset traffic \
