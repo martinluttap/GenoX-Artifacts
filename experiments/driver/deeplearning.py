@@ -20,6 +20,7 @@ from utils import (
     run_agent,
     run_resnet18,
     run_jasper,
+    run_ssd,
     run_stress,
     run_exp_prep,
     run_exp_cleanup,
@@ -64,7 +65,7 @@ def main():
                 f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============"
             )
 
-            LABEL = f"epoch10_batch512-{RUN}-{POLICY}-{APP}"
+            LABEL = f"epoch2_batch32_nproc3-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep
@@ -76,11 +77,12 @@ def main():
 
             # Run Resmon
             resmon_ps = run_resmon(LABEL)
-            # Run Resnet18
-            jasper_ps = run_jasper(LABEL)
+            # Run DL
+            # dl_ps = run_jasper(LABEL)
+            dl_ps = run_ssd(LABEL)
 
-            while jasper_ps.poll() is None:
-                print(f"{jasper_ps.stdout} Running ...")
+            while dl_ps.poll() is None:
+                print(f"{dl_ps.stdout} Running ...")
                 time.sleep(1)
 
             print("ResNet process finished!")

@@ -177,6 +177,26 @@ def run_jasper(LABEL: str, CPUS: str = None) -> subprocess.Popen:
 
     return jasper_ps
 
+def run_ssd(LABEL: str, CPUS: str = None) -> subprocess.Popen:
+    DIR: str = f"{TOP_DIR}/../deeplearning"
+    DATA_PATH: str = f'/mnt/coco' 
+
+    cpus: str = f"--cpus={CPUS}" if CPUS else ""
+    outfile = open(f"{LABEL}-dl.log", "w")
+    num_gpus = os.popen('nvidia-smi -L | wc -l ').read().strip()
+    cmd: str = (
+        f"sudo docker run --rm --gpus=all --ipc=host -v {DATA_PATH}:/coco -v {DIR}:/SSD nvidia_ssd torchrun --nproc_per_node=3 /SSD/ssd.py --backbone resnet18 --bs 32 --warmup 300 --epochs 2 --torchvision-weights-version IMAGENET1K_V1 --data-layout channels_first --data /coco ".split()
+    )
+    ssd_ps = subprocess.Popen(
+        cmd,
+        cwd=TOP_DIR,
+        stdin=subprocess.DEVNULL,
+        stderr=outfile,
+        stdout=outfile,
+        close_fds=True,
+    )
+
+    return ssd_ps
 
 def run_nextflow(INPUT_CONFIG: str, LABEL: str, OUT_LOG: str) -> subprocess.Popen:
     DIR: str = f"{TOP_DIR}/../"
