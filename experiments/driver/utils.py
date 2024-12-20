@@ -36,6 +36,8 @@ POLICIES: List[str] = [
     "elasticcontainer",
     "ec_capped",
     "showar",
+    "nolimit",
+    "static",
 ]
 
 START_RUN: int = 1
@@ -109,6 +111,8 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
         "showar": "--policy sw",
         "elasticcontainer": "--policy ec",
         "ec_capped": "--policy ec_capped",
+        "nolimit": "--policy nolimit",
+        "static": "--policy static",
     }
     assert policy in policy_flags.keys(), f"Policy {policy} not found!"
 
@@ -280,6 +284,22 @@ def kill_associated_processes():
     )
     run_cmd(cmd)
 
+
+def update_core_request(INPUT_CONFIG: str, CORE_REQ: int):
+    cmd: str = (
+        f"sed -e \"s|.*threads.*|params.num_threads = {CORE_REQ}|g\" -i {INPUT_CONFIG}"
+    )
+    print(f'Updating core request in config file ...')
+    run_cmd(cmd)
+
+
+def update_core_alloc(STATIC_ALLOC: int):
+    AGENT_PATH = f'{AGENT_DIR}/controller/controller.go'
+    cmd: str = (
+        f"sed -e \"s|\(.*\)StaticN.*|\\1StaticN({STATIC_ALLOC})|g\" -i {AGENT_PATH}"
+    )
+    print(f'Updating static alloc in agent file to {STATIC_ALLOC}...')
+    run_cmd(cmd)
 
 def run_exp_prep(INPUT_CONFIG: str, LABEL: str, WORKFLOW: str) -> None:
     # Clear PageCache, dentries, indoes, and swap

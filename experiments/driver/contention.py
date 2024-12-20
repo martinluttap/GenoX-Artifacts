@@ -23,6 +23,8 @@ from utils import (
     run_exp_prep,
     run_exp_cleanup,
     run_resmon,
+    update_core_alloc,
+    update_core_request,
 )
 
 """
@@ -46,9 +48,12 @@ def main():
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
     # STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
-    STRESS_NUMCORES = [0]  # 0 will fail
+    STRESS_NUMCORES = [92]  # 0 will fail
+    nproc = os.popen('nproc').read().strip()
+    CORE_REQS = [1, nproc]
+    STATIC_ALLOCS = [1, nproc] if args.policy != "nolimit" else [0]
 
-    for RUN, NUMCORE in list(itertools.product(RUNS, STRESS_NUMCORES)):
+    for RUN, CORE_REQ, STATIC_ALLOC, STRESS_NUMCORE in list(itertools.product(RUNS, CORE_REQS, STATIC_ALLOCS, STRESS_NUMCORES)):
         try:
             assert args.app, "Application not provided"
             assert args.policy, "Policy not provided"
@@ -64,15 +69,17 @@ def main():
             POLICY = args.policy
 
             print(
-                f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, RUN={RUN}  ============"
+                f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, STATI_ALLOC={STATIC_ALLOC}, RUN={RUN}, CORE_REQ={CORE_REQ}, HOG={STRESS_NUMCORE}  ============"
             )
 
-            LABEL = f"scale_freq_0.02s-{NUMCORE}-{RUN}-{POLICY}-{APP}"
+            LABEL = f"test_req{CORE_REQ}s{STATIC_ALLOC}-hog{STRESS_NUMCORE}-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep
             kill_associated_processes()
+            update_core_request(INPUT_CONFIG, CORE_REQ)
             run_exp_prep(INPUT_CONFIG, LABEL, WORKFLOW)
+            update_core_alloc(STATIC_ALLOC)
 
             # Run Agent
             all_agent_ps = run_agent(LABEL, POLICY)
@@ -82,7 +89,7 @@ def main():
             # Run Nextflow
             nextflow_ps = run_nextflow(INPUT_CONFIG, LABEL, OUT_LOG)
             # Run stressor
-            stress_ps = run_stress(NUMCORE)
+            stress_ps = run_stress(STRESS_NUMCORE)
 
             while nextflow_ps.poll() is None:
                 for line in nextflow_ps.stdout:
