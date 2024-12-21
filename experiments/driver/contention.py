@@ -48,7 +48,7 @@ def main():
 
     RUNS = [i for i in range(START_RUN, END_RUN)]
     # STRESS_NUMCORES = [ 95, 94, 92, 80, 64, 32, 0 ] # 0 will fail
-    STRESS_NUMCORES = [92]  # 0 will fail
+    STRESS_NUMCORES = [94]  # 0 will fail
     nproc = os.popen('nproc').read().strip()
     CORE_REQS = [1, nproc]
     STATIC_ALLOCS = [1, nproc] if args.policy != "nolimit" else [0]

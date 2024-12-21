@@ -6,7 +6,6 @@ TOOL_PATH = params.tool_dir + "samtools_sort.nf"
 include { SAMTOOLS_SORT_NO_LIMIT as SAMTOOLS_SORT1 } from TOOL_PATH
 include { SAMTOOLS_SORT_NO_LIMIT as SAMTOOLS_SORT2 } from TOOL_PATH
 
-
 REF_PATH = params.ref_dir
 ref_fa = Channel.fromPath(REF_PATH + '/*.fa')
 ref_amb = Channel.fromPath(REF_PATH + '/*.amb')
@@ -22,7 +21,7 @@ READ_PATH = params.read_dir + "/bams/1500MB/"
 
 Date loadStart = new Date()
 println ("Data loading started ...")
-bam_file = Channel.fromPath(READ_PATH + '/SRR*.bam')
+bam_file = Channel.fromPath(READ_PATH + '/chr1.bam')
 
 workflow {
     bam_file.view {
@@ -38,9 +37,9 @@ workflow {
         println ("Loading done! Took " + td)
     }
     SAMTOOLS_SORT1(
-        bam_file
+        bam_file, num_threads
     )
-    // SAMTOOLS_SORT2(
-    //     bam_file
-    // )
+    SAMTOOLS_SORT2(
+        bam_file, num_threads
+    )
 }

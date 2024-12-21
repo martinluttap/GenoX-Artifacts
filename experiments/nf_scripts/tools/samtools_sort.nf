@@ -3,13 +3,14 @@ process SAMTOOLS_SORT_NO_LIMIT {
 
     input:
       path input_bam
+      val num_threads
 		
     output:
       path "${input_bam.getBaseName()}_sorted.bam", emit: sorted_bam
 
     script:
       """
-      samtools sort  -@ 96 -o ${input_bam.getBaseName()}_sorted.bam ${input_bam}
+      samtools sort  -@ ${num_threads} -o ${input_bam.getBaseName()}_sorted.bam ${input_bam}
       """
         
 }
