@@ -189,6 +189,7 @@ def install_java(nonroot_pool: TGroup):
     user = nonroot_pool[0].user
     commands = [
         "sudo apt-get install -y zip unzip",
+        'echo "export JAVA_CMD=/home/cc/.sdkman/candidates/java/current/bin/java" >> ~/.bashrc',
         'curl -s "https://get.sdkman.io" | bash',
         f'source "/home/{user}/.sdkman/bin/sdkman-init.sh" ; sdk install java 17.0.10-tem',
         "java -version",
@@ -200,6 +201,7 @@ def install_java(nonroot_pool: TGroup):
 @check_installed("nextflow")
 def install_nextflow(nonroot_pool: TGroup):
     commands = [
+        # 'echo "export JAVA_CMD=/home/cc/.sdkman/candidates/java/current/bin/java" >> ~/.bashrc',
         "curl -s https://get.nextflow.io | bash",
         "sudo mv nextflow /usr/bin/",
         # 'mkdir bin',
@@ -421,18 +423,18 @@ def setup_burstkernel(pool: TGroup):
 
 if __name__ == "__main__":
     nonroot_pool = TGroup(
-        "cc@129.114.109.8",  # ectr-instance1
+        "cc@129.114.108.48",
     )
     # Stack for genomics workflows:
     ## Docker, java, nextflow, various images & datasets.
     ## Golang + python for our agent.
-    # install_apt_deps(nonroot_pool)
+    install_apt_deps(nonroot_pool)
     # install_gh(nonroot_pool)
     # install_docker(nonroot_pool)
     # install_java(nonroot_pool)
     # install_nextflow(nonroot_pool)
     # install_golang(nonroot_pool)
-    # install_rclone(nonroot_pool)
+    install_rclone(nonroot_pool)
     # install_python_deps(nonroot_pool)
 
     # setup_codebase(nonroot_pool)
@@ -442,8 +444,8 @@ if __name__ == "__main__":
     # pull_docker_genomics(nonroot_pool)
     # pull_datasets(nonroot_pool)
     ## Deep Learning (only on GPU nodes)
-    install_nvidia_toolkit(nonroot_pool)
-    pull_docker_deeplearning(nonroot_pool)
+    # install_nvidia_toolkit(nonroot_pool)
+    # pull_docker_deeplearning(nonroot_pool)
 
     # Stack for SOTA.
     ## Burst Kernel: QEMU, cloud-utils, VM images.
