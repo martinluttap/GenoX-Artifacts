@@ -199,8 +199,8 @@ if __name__ == "__main__":
     try:
         assert args.app, "Application not provided"
 
-        WORKFLOW = f"/home/cc//elastic-container/containermod/experiments/nf_scripts/{args.app}.nf"
-        INPUT_CONFIG = f"/home/cc//elastic-container/containermod/experiments/configs/{args.app}.config"
+        WORKFLOW = f"/home/cc/case-studies/2024-biosys-ec/experiments/nf_scripts/{args.app}.nf"
+        INPUT_CONFIG = f"/home/cc/case-studies/2024-biosys-ec/experiments/configs/{args.app}.config"
         PATH_CONTROLLER = (
             f"/home/cc//elastic-container/containermod/controller/controller.go"
         )

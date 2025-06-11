@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/elastic-container/containermod/experiments/"
+EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/gatk_baserecal.nf"
 INPUT_CONFIG="${EXP_DIR}/configs/gatk_baserecal.config"
 LABEL="capped_4-gatk_baserecal"

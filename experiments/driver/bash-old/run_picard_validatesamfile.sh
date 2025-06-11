@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/elastic-container/containermod/experiments/"
+EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/picard_validatesamfile.nf"
 TOOL="${EXP_DIR}/nf_scripts/tools/picard_validatesamfile.nf"
 CONTROLLER="${EXP_DIR}/../controller/controller.go"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/elastic-container/containermod/experiments/"
+EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/gatk_baserecal.nf"
 TOOL="${EXP_DIR}/nf_scripts/tools/gatk_baserecal.nf"
 CONTROLLER="${EXP_DIR}/../controller/controller.go"

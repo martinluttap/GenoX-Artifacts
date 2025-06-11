@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TARGET="/home/cc/research-code/2024/07-week3/experiments/"
-WORKDIR="/home/cc/elastic-container/containermod/experiments/"
+WORKDIR="/home/cc/2024-biosys-ec/experiments/"
 
 # Backup
 rsync -azP ${WORKDIR}/nf_scripts $TARGET

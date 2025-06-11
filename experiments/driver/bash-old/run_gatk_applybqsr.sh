@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/elastic-container/containermod/experiments/"
+EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/gatk_applybqsr.nf"
 INPUT_CONFIG="${EXP_DIR}/configs/gatk_applybqsr.config"
 LABEL="2applybqsr_spark-96c_req-numThreads"

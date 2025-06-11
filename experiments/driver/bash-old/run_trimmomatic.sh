@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/elastic-container/containermod/experiments/"
+EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/trimmomatic.nf"
 INPUT_CONFIG="${EXP_DIR}/configs/trimmomatic.config"
 LABEL="2trimmomatic-64c_req-numThreads"

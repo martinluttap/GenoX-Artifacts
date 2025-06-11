@@ -1,9 +1,9 @@
 #!/bin/bash
 
 
-WORKFLOW="/home/cc//elastic-container/containermod/experiments/nf_scripts/bwa.nf"
-INPUT_CONFIG="/home/cc//elastic-container/containermod/experiments/configs/bwa.config"
-LABEL="base-bwa_corrstep80"
+WORKFLOW="/home/cc/2024-biosys-ec/experiments/nf_scripts/bwa.nf"
+INPUT_CONFIG="/home/cc/2024-biosys-ec/experiments/configs/bwa.config"
+LABEL="test"
 OUT_LOG="${LABEL}.log"
 
 # Kill existing resmon processes

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/elastic-container/containermod/experiments/"
+EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/star.nf"
 INPUT_CONFIG="${EXP_DIR}/configs/star.config"
 LABEL="2star-96c_req-numThreads"
