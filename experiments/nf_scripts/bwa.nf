@@ -24,12 +24,13 @@ ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
 num_threads = params.num_threads
-READ_PATH = params.read_dir + "/SRR24039108"
+// READ_PATH = params.read_dir + "/SRR24039108"
+READ_PATH = params.read_dir + "/synthetic/"
 
 Date loadStart = new Date()
 println ("Data loading started ...")
-fastq_pair = Channel.fromFilePairs(READ_PATH + '/*_{1,2}.fastq', flat: true)
-                    .splitFastq(by: 40000000, limit: 40000000, pe:true, file: true)
+fastq_pair = Channel.fromFilePairs(READ_PATH + '/*_{1,2}.1.fastq', flat: true)
+                    // .splitFastq(by: 40000000, limit: 40000000, pe:true, file: true)
 
 fastq_pair2 = Channel.fromFilePairs(READ_PATH + '/*_{1,2}.fastq', flat: true)
             .splitFastq(by: 50000, limit:50000, pe:true, file: true)

@@ -87,7 +87,7 @@ def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
 
     at_master_outfile = open(f"{AT_MASTER_OUTPATH}", "w")
     # at_master_command: str = f"sudo /root/.pyenv/shims/python3 master.py {port}".split()
-    at_master_command: str = f"sudo python3 master.py {port}".split()
+    at_master_command: str = f"sudo /root/.pyenv/shims/python3 master.py {port}".split()
     at_master_ps = subprocess.Popen(
         at_master_command,
         cwd=AUTOTHROTTLE_DIR,
@@ -375,3 +375,6 @@ def run_exp_cleanup(LABEL: str) -> None:
     run_cmd(f"sudo rm -rf {TOP_DIR}/work")
 
     return
+
+if __name__ == "__main__":
+    run_agent("test", 'autothrottle')
