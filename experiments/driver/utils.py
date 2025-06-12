@@ -117,7 +117,7 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
     assert policy in policy_flags.keys(), f"Policy {policy} not found!"
 
     agent_outfile = open(f"{LABEL}-agent.log", "w")
-    agent_command: str = f"sudo go run main.go {policy_flags[policy]}".split()
+    agent_command: str = f"sudo /usr/local/go/bin/go run main.go {policy_flags[policy]}".split()
     agent_ps = subprocess.Popen(
         agent_command,
         cwd=AGENT_DIR,
