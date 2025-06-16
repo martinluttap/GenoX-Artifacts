@@ -3,6 +3,7 @@ from typing import Any, Callable, Dict, List, Set, Tuple
 import argparse
 import datetime
 import os
+import sys
 from pathlib import Path
 import subprocess
 import random
@@ -49,7 +50,7 @@ def run_showar(LABEL: str) -> List[subprocess.Popen]:
     SHOWAR_AGENT_OUTPATH: str = f"{LABEL}-showar_agent.log"
     showar_agent_outfile = open(f"{SHOWAR_AGENT_OUTPATH}", "w")
     # at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
-    showar_agent_command: str = f"sudo python3 showar.py".split()
+    showar_agent_command: str = f"sudo python3 showar-cgv2.py".split()
     showar_agent_ps = subprocess.Popen(
         showar_agent_command,
         cwd=SHOWAR_DIR,
@@ -71,7 +72,7 @@ def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
     port = random.randint(10000, 60000)
     at_agent_outfile = open(f"{AT_AGENT_OUTPATH}", "w")
     # at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
-    at_agent_command: str = f"sudo python3 agent.py {port}".split()
+    at_agent_command: str = f"sudo python3 agent-cgv2.py {port}".split()
     at_agent_ps = subprocess.Popen(
         at_agent_command,
         cwd=AUTOTHROTTLE_DIR,
@@ -87,7 +88,7 @@ def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
 
     at_master_outfile = open(f"{AT_MASTER_OUTPATH}", "w")
     # at_master_command: str = f"sudo /root/.pyenv/shims/python3 master.py {port}".split()
-    at_master_command: str = f"sudo /root/.pyenv/shims/python3 master.py {port}".split()
+    at_master_command: str = f"sudo /root/.pyenv/shims/python3 master-cgv2.py {port}".split()
     at_master_ps = subprocess.Popen(
         at_master_command,
         cwd=AUTOTHROTTLE_DIR,
@@ -109,6 +110,7 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
         "burst": "--policy bk",
         "autothrottle": "--policy at",
         "showar": "--policy sw",
+        "autopilot": "--policy ap",
         "elasticcontainer": "--policy ec",
         "ec_capped": "--policy ec_capped",
         "nolimit": "--policy nolimit",
@@ -377,4 +379,5 @@ def run_exp_cleanup(LABEL: str) -> None:
     return
 
 if __name__ == "__main__":
-    run_agent("test", 'autothrottle')
+    policy = sys.argv[1] if len(sys.argv) > 1 else exit
+    run_agent("test", policy)
