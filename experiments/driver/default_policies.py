@@ -49,8 +49,8 @@ def main():
     END_RUN = 4
     RUNS = [1]
     nproc = os.popen('nproc').read().strip()
-    CORE_REQS = [2]
-    STATIC_ALLOCS = [2] if args.policy != "nolimit" else [0]
+    CORE_REQS = [16]
+    STATIC_ALLOCS = [16] if args.policy != "nolimit" else [0]
 
     for RUN, CORE_REQ, STATIC_ALLOC, in list(itertools.product(RUNS, CORE_REQS, STATIC_ALLOCS)):
         try:
@@ -71,7 +71,7 @@ def main():
                 f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, STATI_ALLOC={STATIC_ALLOC}, RUN={RUN}, CORE_REQ={CORE_REQ},  ============"
             )
 
-            LABEL = f"getcpu{CORE_REQ}s{STATIC_ALLOC}-{RUN}-{POLICY}-{APP}"
+            LABEL = f"test_4inst_req{CORE_REQ}s{STATIC_ALLOC}-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep

@@ -39,6 +39,7 @@ POLICIES: List[str] = [
     "showar",
     "nolimit",
     "static",
+    "autopilot",
 ]
 
 START_RUN: int = 1
@@ -64,6 +65,25 @@ def run_showar(LABEL: str) -> List[subprocess.Popen]:
 
     return showar_agent_ps
 
+
+def run_autopilot(LABEL: str) -> List[subprocess.Popen]:
+    AP_DIR: str = f"{SOTA_DIR}/autopilot"
+    AP_AGENT_OUTPATH: str = f"{LABEL}-ap_agent.log"
+    ap_agent_outfile = open(f"{AP_AGENT_OUTPATH}", "w")
+    # at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
+    ap_agent_command: str = f"sudo python3 autopilot-cgv2.py".split()
+    ap_agent_ps = subprocess.Popen(
+        ap_agent_command,
+        cwd=AP_DIR,
+        stdin=subprocess.DEVNULL,
+        stderr=ap_agent_outfile,
+        stdout=ap_agent_outfile,
+        close_fds=True,
+    )
+    outpath = Path(f"{AP_DIR}/{AP_AGENT_OUTPATH}").resolve()
+    print(f"Autopilot started with PID: {ap_agent_ps.pid}, outfile: {outpath}")
+
+    return ap_agent_ps
 
 def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
     AUTOTHROTTLE_DIR: str = f"{AGENT_DIR}/autothrottle"
@@ -139,6 +159,9 @@ def run_agent(LABEL: str, policy: str) -> List[subprocess.Popen]:
     if policy == "showar":
         showar_agent_ps = run_showar(LABEL)
         all_processes.append(showar_agent_ps)
+    if policy == "autopilot":
+        ap_agent_ps = run_autopilot(LABEL)
+        all_processes.append(ap_agent_ps)
 
     return all_processes
 
@@ -349,6 +372,7 @@ def run_exp_cleanup(LABEL: str) -> None:
         "-at_master.log",
         "-showar_agent.log",
         "-dl.log",
+        "-ap_agent.log",
     ]
     for suffix in suffixes:
         DIR: str = "."
