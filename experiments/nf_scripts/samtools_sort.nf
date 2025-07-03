@@ -21,7 +21,7 @@ READ_PATH = params.read_dir + "/bams/1500MB/"
 
 Date loadStart = new Date()
 println ("Data loading started ...")
-bam_file = Channel.fromPath(READ_PATH + '/chr1.bam')
+bam_file = Channel.fromPath(READ_PATH + '/SRR062634_1500MB.bam')
 
 workflow {
     bam_file.view {

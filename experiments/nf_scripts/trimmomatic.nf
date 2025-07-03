@@ -51,9 +51,9 @@ workflow {
     TRIMMOMATIC1(
         fastq_pair
     )
-    // TRIMMOMATIC2(
-    //     fastq_pair
-    // )
+    TRIMMOMATIC2(
+        fastq_pair
+    )
     // TRIMMOMATIC3(
     //     fastq_pair
     // )

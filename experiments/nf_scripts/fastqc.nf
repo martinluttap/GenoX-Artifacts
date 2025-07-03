@@ -42,7 +42,7 @@ workflow {
     FASTQC1(
         fastq_files
     )
-    // FASTQC2(
-    //     fastq_files
-    // )
+    FASTQC2(
+        fastq_files
+    )
 }

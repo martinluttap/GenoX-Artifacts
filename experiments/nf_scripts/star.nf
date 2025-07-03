@@ -43,7 +43,7 @@ workflow {
     STAR1(
         fastq_pair, genome_dir
     )
-    // STAR2(
-    //     fastq_pair, genome_dir
-    // )
+    STAR2(
+        fastq_pair, genome_dir
+    )
 }

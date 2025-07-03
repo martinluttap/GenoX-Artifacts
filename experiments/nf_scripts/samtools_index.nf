@@ -28,4 +28,7 @@ workflow {
     SAMTOOLS_INDEX1(
         bam_file
     )
+    SAMTOOLS_INDEX2(
+        bam_file
+    )
 }

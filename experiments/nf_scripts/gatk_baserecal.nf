@@ -24,7 +24,7 @@ ref_sa = Channel.fromPath(REF_PATH + '/*.sa')
 ref_dict = Channel.fromPath(REF_PATH + '/*.dict')
 
 BAM_PATH = params.read_dir + "/bams/1500MB"
-bam_file = Channel.fromPath(BAM_PATH + '/chr1to4.bam')
+bam_file = Channel.fromPath(BAM_PATH + '/chr1.bam')
 
 workflow {
     bam_file.view {
@@ -40,6 +40,9 @@ workflow {
         println ("Loading done! Took " + td)
     }
     BASERECAL_SPARK1(
+        bam_file, ref_known_sites, ref_known_sites_tbi, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict
+    )
+    BASERECAL_SPARK2(
         bam_file, ref_known_sites, ref_known_sites_tbi, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict
     )
 }

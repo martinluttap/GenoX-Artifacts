@@ -22,3 +22,5 @@
 [submodule "sota/showar"]
 	path = sota/showar
 	url = git@github.com:martinluttap/2024-biosys-ec-showar.git
+[submodule "sota/autopilot"]
+	url = git@github.com:martinluttap/2024-biosys-ec-autopilot.git
