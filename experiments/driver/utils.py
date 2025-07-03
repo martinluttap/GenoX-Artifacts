@@ -50,8 +50,8 @@ def run_showar(LABEL: str) -> List[subprocess.Popen]:
     SHOWAR_DIR: str = f"{SOTA_DIR}/showar"
     SHOWAR_AGENT_OUTPATH: str = f"{LABEL}-showar_agent.log"
     showar_agent_outfile = open(f"{SHOWAR_AGENT_OUTPATH}", "w")
-    # at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
-    showar_agent_command: str = f"sudo python3 showar-cgv2.py".split()
+    # at_agent_command: str = f"sudo python3 agent.py {port}".split()
+    showar_agent_command: str = f"sudo python3 showar.py".split()
     showar_agent_ps = subprocess.Popen(
         showar_agent_command,
         cwd=SHOWAR_DIR,
@@ -70,8 +70,8 @@ def run_autopilot(LABEL: str) -> List[subprocess.Popen]:
     AP_DIR: str = f"{SOTA_DIR}/autopilot"
     AP_AGENT_OUTPATH: str = f"{LABEL}-ap_agent.log"
     ap_agent_outfile = open(f"{AP_AGENT_OUTPATH}", "w")
-    # at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
-    ap_agent_command: str = f"sudo python3 autopilot-cgv2.py".split()
+    # at_agent_command: str = f"sudo python3 agent.py {port}".split()
+    ap_agent_command: str = f"sudo python3 autopilot.py".split()
     ap_agent_ps = subprocess.Popen(
         ap_agent_command,
         cwd=AP_DIR,
@@ -91,8 +91,8 @@ def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
 
     port = random.randint(10000, 60000)
     at_agent_outfile = open(f"{AT_AGENT_OUTPATH}", "w")
-    # at_agent_command: str = f"sudo /root/.pyenv/shims/python3 agent.py {port}".split()
-    at_agent_command: str = f"sudo python3 agent-cgv2.py {port}".split()
+    # at_agent_command: str = f"sudo python3 agent.py {port}".split()
+    at_agent_command: str = f"sudo python3 agent.py {port}".split()
     at_agent_ps = subprocess.Popen(
         at_agent_command,
         cwd=AUTOTHROTTLE_DIR,
@@ -107,8 +107,8 @@ def run_autothrottle(LABEL: str) -> List[subprocess.Popen]:
     AT_MASTER_OUTPATH: str = f"{LABEL}-at_master.log"
 
     at_master_outfile = open(f"{AT_MASTER_OUTPATH}", "w")
-    # at_master_command: str = f"sudo /root/.pyenv/shims/python3 master.py {port}".split()
-    at_master_command: str = f"sudo /root/.pyenv/shims/python3 master-cgv2.py {port}".split()
+    # at_master_command: str = f"sudo python3 master.py {port}".split()
+    at_master_command: str = f"sudo python3 master.py {port}".split()
     at_master_ps = subprocess.Popen(
         at_master_command,
         cwd=AUTOTHROTTLE_DIR,

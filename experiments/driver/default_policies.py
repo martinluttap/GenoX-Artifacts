@@ -71,7 +71,7 @@ def main():
                 f"============ Timestamp:{datetime.datetime.now()},app={APP},policy={POLICY}, STATI_ALLOC={STATIC_ALLOC}, RUN={RUN}, CORE_REQ={CORE_REQ},  ============"
             )
 
-            LABEL = f"test_4inst_req{CORE_REQ}s{STATIC_ALLOC}-{RUN}-{POLICY}-{APP}"
+            LABEL = f"test_1inst-{CORE_REQ}s{STATIC_ALLOC}-{RUN}-{POLICY}-{APP}"
             OUT_LOG = f"{LABEL}.log"
 
             # Run prep
