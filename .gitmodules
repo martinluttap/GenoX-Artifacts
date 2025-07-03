@@ -24,3 +24,10 @@
 	url = git@github.com:martinluttap/2024-biosys-ec-showar.git
 [submodule "sota/autopilot"]
 	url = git@github.com:martinluttap/2024-biosys-ec-autopilot.git
+	path = sota/autopilot
+[submodule "sota/2024-biosys-ec-autopilot"]
+	path = sota/2024-biosys-ec-autopilot
+	url = git@github.com:martinluttap/2024-biosys-ec-autopilot.git
+[submodule "sota/--name"]
+	path = sota/--name
+	url = git@github.com:martinluttap/2024-biosys-ec-autopilot.git
