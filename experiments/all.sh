@@ -2,8 +2,8 @@
 
 #POLICIES="base elasticcontainer"
 #APPS="bwa fastqc samtools_sort samtools_index gatk_baserecal_spark star trimmomatic"
-POLICIES="static" # base elasticcontainer showar autothrottle"
-APPS="trimmomatic"
+POLICIES="nolimit" # base elasticcontainer showar autothrottle"
+APPS="dnaseq"
 for POLICY in $POLICIES; do
   for APP in $APPS; do
     python3 driver/default_policies.py --app ${APP} --policy ${POLICY}

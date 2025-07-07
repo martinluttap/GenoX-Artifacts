@@ -23,6 +23,7 @@ APPS: List[str] = [
     "samtools_sort",
     "star",
     "trimmomatic",
+    "dnaseq",
     # Deep Learning
     "resnet18",
     "jasper",

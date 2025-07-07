@@ -9,6 +9,6 @@ process FASTQC_NO_LIMIT {
 		
     script:
         """
-        /usr/local/bin/fastqc ${fastq_files} --dir . --format fastq --kmers 7 --noextract --outdir . --threads 64
+        /usr/local/bin/fastqc ${fastq_files} --dir . --format fastq --kmers 7 --noextract --outdir . --threads 16
         """
 }
