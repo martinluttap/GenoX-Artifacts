@@ -6,6 +6,8 @@ TOOL_PATH = params.tool_dir + "gatk_baserecal.nf"
 include { GATK4_BASERECAL as BASERECAL_DEF1 } from TOOL_PATH
 include { GATK4_BASERECAL_SPARK_NO_LIMIT as BASERECAL_SPARK1 } from TOOL_PATH
 include { GATK4_BASERECAL_SPARK_NO_LIMIT as BASERECAL_SPARK2 } from TOOL_PATH
+include { GATK4_BASERECAL_SPARK_16c as BASERECAL_SPARK_16c_1 } from TOOL_PATH
+include { GATK4_BASERECAL_SPARK_16c as BASERECAL_SPARK_16c_2 } from TOOL_PATH
 
 
 Date loadStart = new Date()
@@ -39,10 +41,16 @@ workflow {
         logFile.append(td)
         println ("Loading done! Took " + td)
     }
-    BASERECAL_SPARK1(
+    // BASERECAL_SPARK1(
+    //     bam_file, ref_known_sites, ref_known_sites_tbi, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict
+    // )
+    // BASERECAL_SPARK2(
+    //     bam_file, ref_known_sites, ref_known_sites_tbi, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict
+    // )
+    BASERECAL_SPARK_16c_1(
         bam_file, ref_known_sites, ref_known_sites_tbi, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict
     )
-    BASERECAL_SPARK2(
+    BASERECAL_SPARK_16c_2(
         bam_file, ref_known_sites, ref_known_sites_tbi, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict
     )
 }

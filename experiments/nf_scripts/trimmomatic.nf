@@ -13,6 +13,9 @@ include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC6 } from TOOL_PATH
 include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC7 } from TOOL_PATH
 include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC8 } from TOOL_PATH
 
+include { TRIMMOMATIC_LIMIT_16c as TRIMMOMATIC_16c_1 } from TOOL_PATH
+include { TRIMMOMATIC_LIMIT_16c as TRIMMOMATIC_16c_2 } from TOOL_PATH
+
 
 Date loadStart = new Date()
 println ("Data loading started ...")
@@ -48,31 +51,16 @@ workflow {
         logFile.append(td)
         println ("Loading done! Took " + td)
     }
-    TRIMMOMATIC1(
-        fastq_pair
-    )
-    TRIMMOMATIC2(
-        fastq_pair
-    )
-    // TRIMMOMATIC3(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC4(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC5(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC6(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC7(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC8(
+    // TRIMMOMATIC1(
     //     fastq_pair
     // )
     // TRIMMOMATIC2(
     //     fastq_pair
     // )
+    TRIMMOMATIC_16c_1(
+        fastq_pair
+    )
+    TRIMMOMATIC_16c_2(
+        fastq_pair
+    )
 }

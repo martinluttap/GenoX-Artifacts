@@ -9,3 +9,15 @@ process TRIMMOMATIC_NO_LIMIT {
         java -Xmx32G -jar /bin/trimmomatic.jar PE -threads 96 ${forward_fastq} ${reverse_fastq} -baseout ${forward_fastq.getBaseName()}.out TOPHRED33
         """        
 }
+
+process TRIMMOMATIC_LIMIT_16c {
+    container "ghcr.io/martinluttap/trimmomatic:0.38"
+
+    input:
+        tuple val(meta), path(forward_fastq), path(reverse_fastq)
+		
+    script:
+        """
+        java -Xmx32G -jar /bin/trimmomatic.jar PE -threads 16 ${forward_fastq} ${reverse_fastq} -baseout ${forward_fastq.getBaseName()}.out TOPHRED33
+        """        
+}
