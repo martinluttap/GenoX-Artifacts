@@ -23,6 +23,6 @@ process STAR_NO_LIMIT_SIMPLE {
 
     script:
         """
-        STAR --genomeDir ${genome_dir} --outFileNamePrefix ${meta}.pe. --runThreadN 96 --readFilesIn ${forward_fastq} ${reverse_fastq}
+        STAR --genomeDir ${genome_dir} --outFileNamePrefix ${meta}.pe. --runThreadN 16 --readFilesIn ${forward_fastq} ${reverse_fastq}
         """
 }
