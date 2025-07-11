@@ -24,6 +24,7 @@ APPS: List[str] = [
     "star",
     "trimmomatic",
     "dnaseq",
+    "rnaseq",
     # Deep Learning
     "resnet18",
     "jasper",
