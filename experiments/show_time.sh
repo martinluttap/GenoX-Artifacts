@@ -33,7 +33,7 @@ fi
 echo "Found folder: $folder"
 
 # Show last 2 lines of each .csv file in the folder
-for csvfile in "$folder"/*cpu*.csv; do
+for csvfile in "$folder"/*resmon*.csv; do
     if [ -f "$csvfile" ]; then
         echo "==> $csvfile <=="
         tail -n 1 "$csvfile"
