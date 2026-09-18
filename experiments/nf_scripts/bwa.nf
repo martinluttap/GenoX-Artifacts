@@ -3,20 +3,8 @@ import groovy.time.TimeDuration
 
 TOOL_PATH = params.tool_dir + "bwa.nf"
 
-include { BWA_NO_LIMIT as BWA1 } from TOOL_PATH
-include { BWA_NO_LIMIT as BWA2 } from TOOL_PATH
-include { BWA_NO_LIMIT as BWA3 } from TOOL_PATH
-include { BWA_NO_LIMIT as BWA4 } from TOOL_PATH
-include { BWA_LIMIT_NUMTHREADS as BWA_LIM1 } from TOOL_PATH
-include { BWA_PE_LIMIT_NUMTHREADS as BWA_PE_LIM1 } from TOOL_PATH
-include { BWA_LIMIT_NUMTHREADS as BWA_LIM2 } from TOOL_PATH
-include { BWA_LIMIT_NUMTHREADS as BWA_LIM3 } from TOOL_PATH
-include { BWA_LIMIT_NUMTHREADS as BWA_LIM4 } from TOOL_PATH
-include { BWA_SE_LIMIT_NUMTHREADS as BWA_SE_LIM1 } from TOOL_PATH
-include { BWA_SE_LIMIT_NUMTHREADS as BWA_SE_LIM2 } from TOOL_PATH
-include { BWA_SE_LIMIT_NUMTHREADS as BWA_SE_LIM3 } from TOOL_PATH
-include { BWA_SE_LIMIT_NUMTHREADS as BWA_SE_LIM4 } from TOOL_PATH
 
+include { BWA_PE_LIMIT_NUMTHREADS as BWA_PE_LIM1 } from TOOL_PATH
 
 
 REF_PATH = params.ref_dir
@@ -54,26 +42,7 @@ workflow {
         logFile.append(td)
         println ("Loading done! Took " + td)
     }
-    // BWA_SE_LIM1(
-    //     fastq, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict, num_threads
-    // )
-    // BWA_SE_LIM2(
-    //     fastq, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict, num_threads
-    // )
-    // BWA_SE_LIM3(
-    //     fastq, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict, num_threads
-    // )
-    // BWA_SE_LIM4(
-    //     fastq, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict, num_threads
-    // )
-
-    // BWA_LIM1(
-    //     fastq, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict, num_threads
-    // )
     BWA_PE_LIM1(
         fastq_pair, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict, num_threads
     )
-    // BWA_LIM2(
-    //     fastq_pair, ref_fa, ref_amb, ref_ann, ref_bwt, ref_fai, ref_pac, ref_sa, ref_dict, num_threads
-    // )
 }

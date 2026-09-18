@@ -5,13 +5,6 @@ import groovy.time.TimeDuration
 TOOL_PATH = params.tool_dir + "trimmomatic.nf"
 
 include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC1 } from TOOL_PATH
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC2 } from TOOL_PATH
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC3 } from TOOL_PATH
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC4 } from TOOL_PATH
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC5 } from TOOL_PATH
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC6 } from TOOL_PATH
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC7 } from TOOL_PATH
-include { TRIMMOMATIC_NO_LIMIT as TRIMMOMATIC8 } from TOOL_PATH
 
 
 Date loadStart = new Date()
@@ -51,28 +44,4 @@ workflow {
     TRIMMOMATIC1(
         fastq_pair
     )
-    // TRIMMOMATIC2(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC3(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC4(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC5(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC6(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC7(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC8(
-    //     fastq_pair
-    // )
-    // TRIMMOMATIC2(
-    //     fastq_pair
-    // )
 }

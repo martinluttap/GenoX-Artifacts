@@ -22,9 +22,6 @@ READ_PATH = params.read_dir + "/SRR24039108/SRR24039108_1.fastq.split"
 Date loadStart = new Date()
 println ("Data loading started ...")
 fastq_files = Channel.fromFilePairs(READ_PATH + '/SRR*_{1,2}.part_{001,002,003,004,005,006,007,008,009,010,011,012,013,014,015,016,017,018,019,020,021,022,023,024,025,026,027,028,029,030,031,032}.fastq').collect()
-// fastq_files = Channel.fromPath(READ_PATH + '/SRR*_{1,2}.part_{001,002,003,004,005,006,007,008,009,010,011,012,013,014,015,016}.fastq').collect()
-//                     // .splitFastq(by: 1000000, limit:1000000, 
-//                     // pe:true, file: true)
 
 workflow {
     fastq_files.view {
