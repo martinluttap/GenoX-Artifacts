@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
+EXP_DIR="/home/cc/GenoX-Artifacts/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/fastqc.nf"
 INPUT_CONFIG="${EXP_DIR}/configs/fastqc.config"
 LABEL="1fastqc-32c_req-numThreads"

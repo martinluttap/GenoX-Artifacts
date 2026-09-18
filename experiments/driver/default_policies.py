@@ -57,12 +57,12 @@ def main():
             assert args.app, "Application not provided"
             assert args.policy, "Policy not provided"
 
-            WORKFLOW = f"/home/cc/2024-biosys-ec/experiments/nf_scripts/{args.app}.nf"
+            WORKFLOW = f"/home/cc/GenoX-Artifacts/experiments/nf_scripts/{args.app}.nf"
             INPUT_CONFIG = (
-                f"/home/cc/2024-biosys-ec/experiments/configs/{args.app}.config"
+                f"/home/cc/GenoX-Artifacts/experiments/configs/{args.app}.config"
             )
             PATH_CONTROLLER = (
-                f"/home/cc/2024-biosys-ec/elasticcontainer/controller/controller.go"
+                f"/home/cc/GenoX-Artifacts/genox/controller/controller.go"
             )
             APP = args.app
             POLICY = args.policy

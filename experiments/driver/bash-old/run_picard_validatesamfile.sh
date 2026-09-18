@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
+EXP_DIR="/home/cc/GenoX-Artifacts/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/picard_validatesamfile.nf"
 TOOL="${EXP_DIR}/nf_scripts/tools/picard_validatesamfile.nf"
 CONTROLLER="${EXP_DIR}/../controller/controller.go"

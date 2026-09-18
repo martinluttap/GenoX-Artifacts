@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
+EXP_DIR="/home/cc/GenoX-Artifacts/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/samtools_sort.nf"
 INPUT_CONFIG="${EXP_DIR}/configs/samtools_sort.config"
 LABEL="2samtools_sort-96c_req-numThreads"

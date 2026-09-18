@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXP_DIR="/home/cc/2024-biosys-ec/experiments/"
+EXP_DIR="/home/cc/GenoX-Artifacts/experiments/"
 WORKFLOW="${EXP_DIR}/nf_scripts/trimmomatic.nf"
 INPUT_CONFIG="${EXP_DIR}/configs/trimmomatic.config"
 LABEL="2trimmomatic-64c_req-numThreads"

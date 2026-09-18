@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-WORKFLOW="/home/cc/2024-biosys-ec/experiments/nf_scripts/bwa.nf"
-INPUT_CONFIG="/home/cc/2024-biosys-ec/experiments/configs/bwa.config"
+WORKFLOW="/home/cc/GenoX-Artifacts/experiments/nf_scripts/bwa.nf"
+INPUT_CONFIG="/home/cc/GenoX-Artifacts/experiments/configs/bwa.config"
 LABEL="test"
 OUT_LOG="${LABEL}.log"
 
