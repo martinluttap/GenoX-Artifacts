@@ -1,18 +1,12 @@
-[submodule "2024-biosys-ec-elasticcontainer"]
-	path = 2024-biosys-ec-elasticcontainer
-	url = git@github.com:martinluttap/2024-biosys-ec-elasticcontainer.git
-[submodule "elasticcontainer"]
-	path = genox
-	url = git@github.com:martinluttap/2024-biosys-ec-elasticcontainer.git
-[submodule "sota/autothrottle"]
+[submodule "autothrottle"]
 	path = sota/autothrottle
-	url = git@github.com:martinluttap/2024-biosys-ec-autothrottle.git
-[submodule "sota/2024-biosys-ec-showar"]
-	path = sota/2024-biosys-ec-showar
-	url = git@github.com:martinluttap/2024-biosys-ec-showar.git
-[submodule "sota/showar"]
+	url = git@github.com:martinluttap/GenoX-Baselines-Autothrottle.git
+[submodule "showar"]
 	path = sota/showar
-	url = git@github.com:martinluttap/2024-biosys-ec-showar.git
-[submodule "sota/autopilot"]
+	url = git@github.com:martinluttap/GenoX-Baselines-Showar.git
+[submodule "autopilot"]
 	path = sota/autopilot
-	url = git@github.com:martinluttap/2024-biosys-ec-autopilot.git
+	url = git@github.com:martinluttap/GenoX-Baselines-Autopilot.git
+[submodule "genox"]
+	path = genox
+	url = git@github.com:martinluttap/GenoX-Agent.git
